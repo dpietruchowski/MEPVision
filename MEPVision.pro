@@ -1,4 +1,5 @@
-TEMPLATE = lib
+#TEMPLATE = lib
+TEMPLATE = app
 TARGET = mep_vision
 CONFIG += console c++11
 CONFIG -= app_bundle
@@ -13,17 +14,21 @@ LIBS += -L"/usr/lib/x86_64-linux-gnu" -lboost_system
 DEFINES += MEP_LIBRARY
 
 SOURCES += main.cpp \
-    mepobject.cpp \
-    mepcomposite.cpp \
-    mepgene.cpp \
-    meptypes.cpp
+    meptypes.cpp \
+    core/mepobject.cpp \
+    core/mepcomposite.cpp \
+    core/mepgene.cpp \
+    core/mepchromosome.cpp \
+    core/meppopulation.cpp \
 
 HEADERS += \
     mep_global.h \
-    mepobject.h \
     meptypes.h \
-    mepcomposite.h \
-    mepgene.h
+    core/mepobject.h \
+    core/mepcomposite.h \
+    core/mepgene.h \
+    core/mepchromosome.h \
+    core/meppopulation.h \
 
     library.path = $$_PRO_FILE_PWD_/../lib
     library.files = $$OUT_PWD/*.so*

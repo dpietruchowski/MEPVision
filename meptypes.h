@@ -1,12 +1,12 @@
 #ifndef MEPTYPES_H
 #define MEPTYPES_H
 
+#include "mep_global.h"
+
 #include <boost/preprocessor.hpp>
 #include <string>
 #include <sstream>
 #include <iomanip>
-
-#include "mep_global.h"
 
 #define X_DEFINE_ENUM_TOSTRING_CASE(r, data, elem)    \
 case elem : return BOOST_PP_STRINGIZE(elem);
