@@ -14,7 +14,7 @@ class MEPSHARED_EXPORT MEPComposite : public MEPObject
 public:
     MEPComposite(const MEPId& id, int initSize);
     MEPComposite(const MEPComposite&);
-//    void init(MEPGenerator&);
+    void init(MEPGenerator&);
 
     int getSize() const;
 
@@ -32,16 +32,16 @@ protected:
 private:
     //Dziedziczace po MEPObject
     void writeObject(std::string&) const;
-    void showObject() const;
-    void showObjectTree() const;
+    void showObject(const std::string& id) const;
+    void showObjectTree(const std::string& id) const;
     void clearObjectResult();
 
     void runObject();
-//    void assessObject(MEPFitness&);
+    int assessObject(MEPFitness&);
 
     virtual MEPObjectPtr cloneObject() const = 0;
     //Meotdy MEPComposite
-//    virtual void initComposite(MEPGenerator&, int size) = 0;
+    virtual void initComposite(MEPGenerator&, int size) = 0;
 private:
     std::vector<MEPObjectPtr> objects_;
     int initSize_;

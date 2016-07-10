@@ -50,6 +50,8 @@ struct MEPSHARED_EXPORT MEPId
     std::string toString() const;
 };
 
+//TODO Change name of variable score.
+//     Problem score_.score;
 struct MEPSHARED_EXPORT MEPScore
 {
     int score;

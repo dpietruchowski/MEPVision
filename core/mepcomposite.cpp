@@ -21,15 +21,10 @@ void MEPComposite::swap(MEPComposite& rhs)
     objects_.swap(rhs.objects_);
 }
 
-//void MEPComposite::init(MEPGenerator& generator)
-//{
-//    initComposite(generator, initSize_);
-//}
-
-//void MEPComposite::initialize(const MEPGenerator& generator)
-//{
-//    init(generator);
-//}
+void MEPComposite::init(MEPGenerator& generator)
+{
+    initComposite(generator, initSize_);
+}
 
 void MEPComposite::sort()
 {
@@ -124,7 +119,7 @@ void MEPComposite::writeObject(std::string& object) const
     }
 }
 
-void MEPComposite::showObject() const
+void MEPComposite::showObject(const string& id) const
 {
     for(const auto& obj: objects_)
     {
@@ -132,7 +127,7 @@ void MEPComposite::showObject() const
     }
 }
 
-void MEPComposite::showObjectTree() const
+void MEPComposite::showObjectTree(const string& id) const
 {
     for(const auto& obj: objects_)
     {
@@ -157,10 +152,12 @@ void MEPComposite::clearObjectResult()
 }
 
 
-//void MEPComposite::assessObject(MEPFitness& fitness)
-//{
-//    for(const auto& object: objects_)
-//    {
-//        object->assess(fitness);
-//    }
-//}
+int MEPComposite::assessObject(MEPFitness& fitness)
+{
+    for(const auto& object: objects_)
+    {
+        object->assess(fitness);
+    }
+    sort();
+    return find(0).getScore();
+}

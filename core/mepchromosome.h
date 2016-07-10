@@ -15,7 +15,7 @@ public:
     void swap(MEPComposite&);
 
 private:
-//    void initComposite(MEPGenerator&, int size);
+    void initComposite(MEPGenerator&, int size);
     MEPObjectPtr cloneObject() const;
 private:
     typedef std::vector<int> Arguments;

@@ -24,15 +24,15 @@ void MEPPopulation::swap(MEPPopulation& rhs)
     MEPComposite::swap(rhs);
 }
 
-//void MEPPopulation::initComposite(MEPGenerator& generator, int size)
-//{
-//    for(int i = 0; i < size; i++)
-//    {
-//        MEPObjectPtr chromosome = generator.create(*this);
-//        chromosome->init(generator);
-//        addObject(chromosome);
-//    }
-//}
+void MEPPopulation::initComposite(MEPGenerator& generator, int size)
+{
+    for(int i = 0; i < size; i++)
+    {
+        MEPObjectPtr chromosome = generator.create(*this);
+        chromosome->init(generator);
+        addObject(chromosome);
+    }
+}
 
 MEPObjectPtr MEPPopulation::cloneObject() const
 {

@@ -51,12 +51,12 @@ bool MEPObject::operator ==(const MEPId& id) const
 
 void MEPObject::show() const
 {
-    showObject();
+    showObject(id_.toString());
 }
 
 void MEPObject::showTree() const
 {
-    showObjectTree();
+    showObjectTree(id_.toString());
 }
 
 void MEPObject::write(std::string& object) const
@@ -112,4 +112,14 @@ MEPObjectPtr MEPObject::clone() const
     MEPObjectPtr objectClone = cloneObject();
 
     return objectClone;
+}
+
+void MEPObject::assess(MEPFitness& fitness)
+{
+    score_.score = assessObject(fitness);
+}
+
+int MEPObject::getScore() const
+{
+    return score_.score;
 }

@@ -37,24 +37,27 @@ public:
     void clearResults();
     void setAsNext(const MEPObject&);
     MEPObjectPtr clone() const;
+    int getScore() const;
 
-//    virtual void init(MEPGenerator&) = 0;
+    virtual void init(MEPGenerator&) {}
     void run();
-//    void assess(MEPFitness&);
+    void assess(MEPFitness&);
 
 protected:
     MEPObject(const MEPObject& rhs);
     void swap(MEPObject&);
     void write(std::string&) const;
 private:
+    void sort();
+private:
     virtual void writeObject(std::string&) const = 0;
-    virtual void showObject() const = 0;
-    virtual void showObjectTree() const = 0;
+    virtual void showObject(const std::string& id) const = 0;
+    virtual void showObjectTree(const std::string& id) const = 0;
     virtual void clearObjectResult() = 0;
     virtual MEPObjectPtr cloneObject() const = 0;
 
     virtual void runObject() = 0;
-//    virtual void assessObject(MEPFitness&) = 0;
+    virtual int assessObject(MEPFitness&) = 0;
 private:
     MEPId id_;
     //For debbuging

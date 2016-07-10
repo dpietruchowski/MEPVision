@@ -15,6 +15,7 @@ MEPGene::MEPGene(const MEPGene& rhs):
 {
     for(int i = 0; i < static_cast<int> (rhs.children_.size()); i++)
     {
+        //Trzeba pomyslec czy dynamic pointer cast nie skasuje nam pozniej obiektu
         children_.push_back(std::dynamic_pointer_cast<MEPGene>
                                 (rhs.children_[i]->clone()) );
     }
@@ -43,25 +44,25 @@ void MEPGene::writeObject(std::string& object) const
     }
 }
 
-void MEPGene::showObject() const
+void MEPGene::showObject(const string& id) const
 {
     if(!isValidResult(result_))
         throw "TU BEDZIE ENUM";
-    showGene(result_);
+    showGene(id, result_);
 }
 
-void MEPGene::showObjectTree() const
+void MEPGene::showObjectTree(const string& id) const
 {
-    showObject();
+    showObject(id);
     for(const auto& child: children_)
     {
-        child->showObjectTree();
+        child->showTree();
     }
 }
 
 void MEPGene::runObject()
 {
-    std::vector<OpenCv> arg;
+    std::vector<cv::Mat> arg;
     for(const auto& child: children_)
     {
         if(!isValidResult(child->result_))
@@ -77,4 +78,14 @@ void MEPGene::runObject()
 void MEPGene::clearObjectResult()
 {
     clearGeneResult(result_);
+}
+
+int MEPGene::assessObject(MEPFitness& fitness)
+{
+    return fitness.measure(result_);
+}
+
+int MEPGene::getNArguments() const
+{
+    return getGeneNArguments();
 }
