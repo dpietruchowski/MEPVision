@@ -12,11 +12,12 @@
 class MEPSHARED_EXPORT MEPComposite : public MEPObject
 {
 public:
-    MEPComposite(const MEPId& id, int initSize);
+    MEPComposite(const MEPId& id, int size);
     MEPComposite(const MEPComposite&);
     void init(MEPGenerator&);
 
     int getSize() const;
+    bool isValid() const;
 
     void sort();
     const MEPObject& find(const int rank) const;
@@ -25,6 +26,8 @@ public:
     int find(const MEPObject&) const;
     void clonePart(const MEPComposite& rhs, int startGeneNumber,
                    int endGeneNumber);
+                   
+    MEPObjectPtr reproduce(MEPSelection&) const;
 
 protected:
     void swap(MEPComposite&);
@@ -44,7 +47,7 @@ private:
     virtual void initComposite(MEPGenerator&, int size) = 0;
 private:
     std::vector<MEPObjectPtr> objects_;
-    int initSize_;
+    int size_;
 };
 
 #endif // MEPCOMPOSITE_H

@@ -18,10 +18,11 @@ private:
     void setTerminal(MatPtr newTerminal);
 private:
     //Inherate from MEPGene
-    MEPObjectPtr cloneObject() const;
+    MEPObjectPtr cloneGene() const;
     void writeGene(std::string&) const;
     int getGeneNArguments() const;
-    void runGene(const std::vector<cv::Mat>&, cv::Mat&) const;
+    void runGene(const std::vector<cv::Mat>&, cv::Mat&);
+    MEPObjectPtr mutate() const;
 private:
     TerminalGene(MatPtr image, MEPId id);
     TerminalGene(MatPtr image);

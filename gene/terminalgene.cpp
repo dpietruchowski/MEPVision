@@ -2,6 +2,7 @@
 
 #include "meptypes.h"
 #include "opencv2/imgproc/imgproc.hpp"
+#include <memory>
 
 using namespace std;
 using namespace cv;
@@ -14,13 +15,13 @@ TerminalSet& TerminalGene::getTerminalSet()
 }
 
 TerminalGene::TerminalGene(MatPtr image, MEPId id):
-    Gene(id), terminal_(image)
+    Gene(id, 0), terminal_(image)
 {
     terminalName_ = "inputImg";
 }
 
 TerminalGene::TerminalGene(MatPtr image):
-    Gene(MEPId()), terminal_(image)
+    Gene(MEPId(), 0), terminal_(image)
 {
     terminalName_ = "inputImg";
 }
@@ -42,7 +43,7 @@ void TerminalGene::setTerminal(MatPtr newTerminal)
     terminal_ = move(newTerminal);
 }
 
-MEPObjectPtr TerminalGene::cloneObject() const
+MEPObjectPtr TerminalGene::cloneGene() const
 {
     return MEPObjectPtr( new TerminalGene(*this) );
 }
@@ -57,7 +58,15 @@ int TerminalGene::getGeneNArguments() const
     return 0;
 }
 
-void TerminalGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst) const
+void TerminalGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst)
 {
     terminal_->copyTo(dst);
+}
+
+
+MEPObjectPtr TerminalGene::mutate() const
+{
+	MEPObjectPtr mutated = cloneGene();
+    std::static_pointer_cast<TerminalGene> (mutated)->setTerminal(terminals_.getRandomImage());
+	return mutated;
 }

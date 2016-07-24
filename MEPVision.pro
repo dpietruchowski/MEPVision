@@ -32,7 +32,11 @@ SOURCES += main.cpp \
     gene/functionset.cpp \
     gene/terminalgene.cpp \
     gene/terminalset.cpp \
-    gene/gene.cpp
+    gene/gene.cpp \
+    selection/mepselectiontypes.cpp \
+    selection/mepselection.cpp \
+    selection/rouletteselection.cpp \
+    selection/tournamentselection.cpp
 
 HEADERS += \
     mep_global.h \
@@ -55,7 +59,11 @@ HEADERS += \
     gene/terminalgene.h \
     gene/terminalset.h \
     gene/gene.h \
-    functions.h
+    functions.h \
+    selection/mepselectiontypes.h\
+    selection/mepselection.h \
+    selection/rouletteselection.h \
+    selection/tournamentselection.h
 
     library.path = $$_PRO_FILE_PWD_/../lib
     library.files = $$OUT_PWD/*.so*

@@ -5,7 +5,7 @@
 #include "meptypes.h"
 #include "generator/mepgenerator.h"
 #include "fitness/mepfitness.h"
-//#include "selection/selection.h"
+#include "selection/mepselection.h"
 //#include "reproduction/mutation.h"
 //#include "reproduction/crossover.h"
 
@@ -38,6 +38,7 @@ public:
     void setAsNext(const MEPObject&);
     MEPObjectPtr clone() const;
     int getScore() const;
+    void addToSelection(MEPSelection&) const;
 
     virtual void init(MEPGenerator&) {}
     void run();
@@ -62,8 +63,8 @@ private:
     MEPId id_;
     //For debbuging
     //MEPId ownerId_;
-    MEPScore score_;
-    MEPScore rank_;
+    int score_;
+    int rank_;
 
     std::shared_ptr<int> nClones_;
 };

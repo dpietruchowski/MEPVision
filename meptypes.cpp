@@ -32,36 +32,36 @@ string MEPId::toString() const
     return id;
 }
 
-MEPScore::MEPScore()
-{
-    score = 0;
-    normalized = 0;
-    standardized = 0;
-}
+//MEPScore::MEPScore()
+//{
+//    score = 0;
+//    normalized = 0;
+//    standardized = 0;
+//}
 
-MEPScore::MEPScore(int score, double normalized, double standardized):
-    score(score), normalized(normalized), standardized(standardized)
-{
-}
+//MEPScore::MEPScore(int score, double normalized, double standardized):
+//    score(score), normalized(normalized), standardized(standardized)
+//{
+//}
 
-bool MEPScore::operator ==(const MEPScore& rhs) const
-{
-    return score == rhs.score;
-}
+//bool MEPScore::operator ==(const MEPScore& rhs) const
+//{
+//    return score == rhs.score;
+//}
 
-bool MEPScore::operator ==(const int rScore) const
-{
-    return score == rScore;
-}
+//bool MEPScore::operator ==(const int rScore) const
+//{
+//    return score == rScore;
+//}
 
-string MEPScore::toString() const
-{
-    string sScore = to_string(score);
-    sScore += " ";
-    sScore += to_string_with_precision(normalized, 3);
-    sScore += " ";
-    sScore += to_string_with_precision(standardized, 3);
+//string MEPScore::toString() const
+//{
+//    string sScore = to_string(score);
+//    sScore += " ";
+//    sScore += to_string_with_precision(normalized, 3);
+//    sScore += " ";
+//    sScore += to_string_with_precision(standardized, 3);
 
-    return sScore;
-}
+//    return sScore;
+//}
 

@@ -17,10 +17,11 @@ private:
     void setFunction(std::pair<FunctionId, FunctionPtr> p);
 private:
     //Inherate from MEPGene
-    MEPObjectPtr cloneObject() const;
+    MEPObjectPtr cloneGene() const;
     void writeGene(std::string&) const;
     int getGeneNArguments() const;
-    void runGene(const std::vector<cv::Mat>&, cv::Mat&) const;
+    void runGene(const std::vector<cv::Mat>&, cv::Mat&);
+    MEPObjectPtr mutate() const;
 private:
     FunctionGene(std::pair<FunctionId, FunctionPtr> p, MEPId id);
     FunctionGene(std::pair<FunctionId, FunctionPtr> p);

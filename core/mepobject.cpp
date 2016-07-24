@@ -1,18 +1,18 @@
 #include "mepobject.h"
 
 #include <utility>
+#include <limits>
 
 using namespace std;
 
 MEPObject::MEPObject(const MEPId& id):
-    id_(id), score_(MEPScore()), rank_(MEPScore()),
-    nClones_(new int)
+    id_(id), score_(std::numeric_limits<int>::max()), rank_(0),
+    nClones_(new int(0))
 {
-    *nClones_ = 0;
 }
 
 MEPObject::MEPObject(const MEPObject& rhs):
-    score_(MEPScore()), rank_(MEPScore())
+    score_(std::numeric_limits<int>::max()), rank_(0)
 {
     nClones_ = rhs.nClones_;
     (*nClones_)++;
@@ -36,7 +36,7 @@ bool MEPObject::operator ==(const MEPObject& rhs) const
 
 bool MEPObject::operator <(const MEPObject& rhs) const
 {
-    return score_.score < rhs.score_.score;
+    return score_ < rhs.score_;
 }
 
 bool MEPObject::operator ==(const int& rank) const
@@ -68,13 +68,13 @@ void MEPObject::write(std::string& object) const
         object += " ";
     }
 
-    object += rank_.toString();
+    object += to_string(rank_);
     nSpaces = 38 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
     }
-    object += score_.toString();
+    object += to_string(score_);
     nSpaces = 61 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
@@ -99,7 +99,7 @@ void MEPObject::clearResults()
 
 void MEPObject::setAsNext(const MEPObject& rhs)
 {
-    rank_.score = rhs.rank_.score + 1;
+    rank_ = rhs.rank_ + 1;
 }
 
 void MEPObject::run()
@@ -116,10 +116,15 @@ MEPObjectPtr MEPObject::clone() const
 
 void MEPObject::assess(MEPFitness& fitness)
 {
-    score_.score = assessObject(fitness);
+    score_ = assessObject(fitness);
 }
 
 int MEPObject::getScore() const
 {
-    return score_.score;
+    return score_;
+}
+
+void MEPObject::addToSelection(MEPSelection& selection) const
+{
+	selection.add(rank_, score_);
 }

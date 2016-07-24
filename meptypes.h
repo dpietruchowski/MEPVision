@@ -52,16 +52,16 @@ struct MEPSHARED_EXPORT MEPId
 
 //TODO Change name of variable score.
 //     Problem score_.score;
-struct MEPSHARED_EXPORT MEPScore
-{
-    int score;
-    double normalized;
-    double standardized;
-    MEPScore();
-    MEPScore(int, double, double);
-    bool operator ==(const MEPScore&) const;
-    bool operator ==(const int rScore) const;
-    std::string toString() const;
-};
+//struct MEPSHARED_EXPORT MEPScore
+//{
+    //int score;
+    //double normalized;
+    //double standardized;
+    //MEPScore();
+    //MEPScore(int, double, double);
+    //bool operator ==(const MEPScore&) const;
+    //bool operator ==(const int rScore) const;
+    //std::string toString() const;
+//};
 
 #endif // MEPTYPES_H
