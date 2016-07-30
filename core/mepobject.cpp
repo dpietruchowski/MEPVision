@@ -124,7 +124,12 @@ int MEPObject::getScore() const
     return score_;
 }
 
+const MEPId& MEPObject::getId() const
+{
+    return id_;
+}
+
 void MEPObject::addToSelection(MEPSelection& selection) const
 {
-	selection.add(rank_, score_);
+    selection.add(rank_, score_);
 }

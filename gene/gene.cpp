@@ -40,9 +40,9 @@ void Gene::runGene(const Children& children)
     std::vector<cv::Mat> arg;
     for(const auto& child: children)
     {
-        if(!static_cast<const Gene&> (*child).isValidResult())
+        if(!dynamic_cast<const Gene&> (child.get()).isValidResult())
             throw "TU BEDZIE ENUM ERROR";
-        arg.push_back(static_cast<const Gene&> (*child).result_);
+        arg.push_back(static_cast<const Gene&> (child.get()).result_);
     }
 
     if(!isValidResult())

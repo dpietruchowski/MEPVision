@@ -28,9 +28,9 @@ void MEPComposite::init(MEPGenerator& generator)
 
 void MEPComposite::sort()
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     vector<MEPObject*> sorted;
     for(auto& obj : objects_)
     {
@@ -49,9 +49,9 @@ void MEPComposite::sort()
 
 const MEPObject& MEPComposite::find(const int rank) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     vector<MEPObjectPtr>::const_iterator it;
     it = std::find_if(objects_.begin(), objects_.end(),
                       [&](const MEPObjectPtr& obj)
@@ -64,9 +64,9 @@ const MEPObject& MEPComposite::find(const int rank) const
 
 const MEPObject& MEPComposite::find(const MEPId& id) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     vector<MEPObjectPtr>::const_iterator it;
     it = std::find_if(objects_.begin(), objects_.end(),
                       [&](const MEPObjectPtr& obj)
@@ -79,9 +79,9 @@ const MEPObject& MEPComposite::find(const MEPId& id) const
 
 int MEPComposite::find(const MEPObject& object) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(int i = 0; i < getSize(); i++)
     {
         if(*objects_[i] == object)
@@ -94,9 +94,9 @@ void MEPComposite::clonePart(const MEPComposite& rhs,
                              int startObjectNumber,
                              int endObjectNumber)
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     if ( (startObjectNumber > endObjectNumber) ||
              (startObjectNumber >= rhs.getSize()))
     {
@@ -110,16 +110,16 @@ void MEPComposite::clonePart(const MEPComposite& rhs,
 
     for (int i = startObjectNumber; i <= endObjectNumber; i++)
     {
-        addObject(rhs.objects_[i]->clone());
+        cloneCompositeObject(rhs, *rhs.objects_[i], objects_);
     }
 }
 
 void MEPComposite::addObject(MEPObjectPtr object)
 {
     if(isValid() == true)
-		objects_.push_back(object);
+        objects_.push_back(object);
     else
-		throw "Can not add object, composite is full";
+        throw "Can not add object, composite is full";
 }
 
 int MEPComposite::getSize() const
@@ -129,9 +129,9 @@ int MEPComposite::getSize() const
 
 void MEPComposite::writeObject(std::string& object) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     object = "\n";
     for(const auto& obj: objects_)
     {
@@ -142,9 +142,9 @@ void MEPComposite::writeObject(std::string& object) const
 
 void MEPComposite::showObject(const string& id) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(const auto& obj: objects_)
     {
         obj->show();
@@ -153,9 +153,9 @@ void MEPComposite::showObject(const string& id) const
 
 void MEPComposite::showObjectTree(const string& id) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(const auto& obj: objects_)
     {
         obj->showTree();
@@ -164,9 +164,9 @@ void MEPComposite::showObjectTree(const string& id) const
 
 void MEPComposite::runObject()
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(const auto& obj: objects_)
     {
         obj->run();
@@ -175,9 +175,9 @@ void MEPComposite::runObject()
 
 void MEPComposite::clearObjectResult()
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(const auto& obj: objects_)
     {
         obj->clearResults();
@@ -187,9 +187,9 @@ void MEPComposite::clearObjectResult()
 
 int MEPComposite::assessObject(MEPFitness& fitness)
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
+    if(!isValid())
+        throw "Object is invalid";
+    
     for(const auto& object: objects_)
     {
         object->assess(fitness);
@@ -200,21 +200,21 @@ int MEPComposite::assessObject(MEPFitness& fitness)
 
 MEPObjectPtr MEPComposite::reproduce(MEPSelection& selection) const
 {
-	if(!isValid())
-		throw "Object is invalid";
-		
-	for(int i = 0; i < getSize(); ++i)
-	{
+    if(!isValid())
+        throw "Object is invalid";
+    
+    for(int i = 0; i < getSize(); ++i)
+    {
         objects_[i]->addToSelection(selection);
-	}
-	
+    }
+
     selection.calcScores();
     vector<const MEPObject*> parents;
     for(int i = 0; i < 2; ++i)
     {
         parents.push_back(&find(selection.getSelectedRank()));
     }
-	// tu implementacja MEPOperation
+    // tu implementacja MEPOperation
 
     return nullptr;
 }
@@ -222,4 +222,9 @@ MEPObjectPtr MEPComposite::reproduce(MEPSelection& selection) const
 bool MEPComposite::isValid() const
 {
     return size_ == static_cast<int> (objects_.size());
+}
+
+void MEPComposite::addChild(MEPGene& gene, int childNumber) const
+{
+    //gene.addChild(*objects_[childNumber]);
 }

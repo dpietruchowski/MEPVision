@@ -38,6 +38,7 @@ public:
     void setAsNext(const MEPObject&);
     MEPObjectPtr clone() const;
     int getScore() const;
+    const MEPId& getId() const;
     void addToSelection(MEPSelection&) const;
 
     virtual void init(MEPGenerator&) {}

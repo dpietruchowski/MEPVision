@@ -2,16 +2,17 @@
 #define MEPCOMPOSITE_H
 
 #include "mepobject.h"
+#include "mepgene.h"
 
 #include <vector>
 #include <string>
 
 
-//TODO Think if in method assess should calculate standardized and fitness score
-//     and set rank;
+//TODO addchild - shouldnt be here
 class MEPSHARED_EXPORT MEPComposite : public MEPObject
 {
 public:
+    typedef std::vector<MEPObjectPtr> Objects;
     MEPComposite(const MEPId& id, int size);
     MEPComposite(const MEPComposite&);
     void init(MEPGenerator&);
@@ -26,12 +27,13 @@ public:
     int find(const MEPObject&) const;
     void clonePart(const MEPComposite& rhs, int startGeneNumber,
                    int endGeneNumber);
-                   
+
     MEPObjectPtr reproduce(MEPSelection&) const;
 
 protected:
     void swap(MEPComposite&);
     void addObject(MEPObjectPtr);
+    void addChild(MEPGene&, int childNumber) const;
 private:
     //Dziedziczace po MEPObject
     void writeObject(std::string&) const;
@@ -45,8 +47,11 @@ private:
     virtual MEPObjectPtr cloneObject() const = 0;
     //Meotdy MEPComposite
     virtual void initComposite(MEPGenerator&, int size) = 0;
+    virtual void cloneCompositeObject(const MEPComposite& rhs,
+                                      const MEPObject&,
+                                      const Objects&) = 0;
 private:
-    std::vector<MEPObjectPtr> objects_;
+    Objects objects_;
     int size_;
 };
 

@@ -3,22 +3,23 @@
 
 #include "mepobject.h"
 
-#include <memory>
 #include <string>
 #include <vector>
+#include <functional>
 
 //TODO For doing library for different types of result you can do
 //     class which implement for example function show, isvalid, clear
 //TODO Move result do Gene
 class MEPSHARED_EXPORT MEPGene;
-using MEPGenePtr = std::shared_ptr<MEPGene>;
 class MEPSHARED_EXPORT MEPGene : public MEPObject
 {
 public:
-    typedef std::vector<MEPGenePtr>  Children;
+    typedef std::vector<std::reference_wrapper<MEPGene>> Children;
     MEPGene(const MEPId& id, int size);
     int getNArguments() const;
     bool isValid() const;
+    const MEPId& getChildId(int childNumber) const;
+    void addChild(MEPGene&);
 
 protected:
     MEPGene(const MEPGene&);
@@ -46,7 +47,7 @@ private:
     virtual void runGene(const Children&) = 0;
     virtual bool isValidResult() const = 0;
     virtual MEPObjectPtr mutate() const = 0;
-    
+
 private:
     Children children_;
     int size_;

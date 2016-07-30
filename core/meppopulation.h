@@ -15,6 +15,10 @@ public:
 private:
     void initComposite(MEPGenerator&, int size);
     MEPObjectPtr cloneObject() const;
+    void cloneCompositeObject(const MEPComposite& rhs,
+                              const MEPObject&,
+                              const Objects&);
+
 };
 
 #endif // MEPPOPULATION_H

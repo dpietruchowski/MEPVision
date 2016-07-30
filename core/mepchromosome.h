@@ -17,9 +17,9 @@ public:
 private:
     void initComposite(MEPGenerator&, int size);
     MEPObjectPtr cloneObject() const;
-private:
-    typedef std::vector<int> Arguments;
-    std::vector<Arguments> objectArguments;
+    void cloneCompositeObject(const MEPComposite& rhs,
+                              const MEPObject&,
+                              const Objects&);
 };
 
 #endif // MEPCHROMOSOME_H
