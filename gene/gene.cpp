@@ -1,6 +1,7 @@
 #include "gene.h"
 #include "opencv2/highgui/highgui.hpp"
 
+#include <iostream>
 #include <memory>
 
 Gene::Gene(const MEPId& id, int size):
@@ -15,7 +16,7 @@ Gene::Gene(const Gene& rhs):
 
 }
 
-bool Gene::isValidResult() const
+bool Gene::isValidResults() const
 {
     return !result_.empty();
 }
@@ -40,12 +41,10 @@ void Gene::runGene(const Children& children)
     std::vector<cv::Mat> arg;
     for(const auto& child: children)
     {
-        if(!dynamic_cast<const Gene&> (child.get()).isValidResult())
-            throw "TU BEDZIE ENUM ERROR";
+        if(!dynamic_cast<const Gene&> (child.get()).isValidResults())
+            throw "Gene::runGene: TU BEDZIE ENUM ERROR";
         arg.push_back(static_cast<const Gene&> (child.get()).result_);
     }
 
-    if(!isValidResult())
-        throw "TU BEDZIE ENUM ERROR";
     runGene(arg, result_);
 }

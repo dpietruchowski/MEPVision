@@ -1,16 +1,17 @@
 #ifndef GENE_H
 #define GENE_H
 
-#include "core/mepgene.h"
+#include "../mep_global.h"
+#include "../core/mepgene.h"
 
-class Gene : public MEPGene
+class MEPSHARED_EXPORT Gene : public MEPGene
 {
 protected:
     Gene(const MEPId&, int size);
     Gene(const Gene&);
 
 private:
-    bool isValidResult() const;
+    bool isValidResults() const;
     void clearGeneResult();
     void showGene(const std::string& windowName) const;
 

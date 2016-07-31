@@ -5,7 +5,7 @@
 #include "gene.h"
 #include "functionset.h"
 
-class FunctionGene: public Gene
+class MEPSHARED_EXPORT FunctionGene: public Gene
 {
 public:
     static FunctionSet& getFunctionSet();

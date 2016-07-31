@@ -19,8 +19,9 @@ public:
 
     int getSize() const;
     bool isValid() const;
+    bool isValidResults() const;
+    std::vector<bool> isObjectsClone(const MEPComposite&);
 
-    void sort();
     const MEPObject& find(const int rank) const;
     const MEPObject& find(const MEPId&) const;
 
@@ -35,6 +36,7 @@ protected:
     void addObject(MEPObjectPtr);
     void addChild(MEPGene&, int childNumber) const;
 private:
+    void sort();
     //Dziedziczace po MEPObject
     void writeObject(std::string&) const;
     void showObject(const std::string& id) const;

@@ -1,9 +1,10 @@
 #ifndef MEPSELECTIONTYPES_H
 #define MEPSELECTIONTYPES_H
 
+#include "../mep_global.h"
 #include <vector>
 
-struct MEPScore
+struct MEPSHARED_EXPORT MEPScore
 {
     int rank;
     int value;
@@ -12,18 +13,18 @@ struct MEPScore
 };
 typedef std::vector<MEPScore> Scores;
 
-struct ScoreType
+struct MEPSHARED_EXPORT ScoreType
 {
     virtual ~ScoreType() {}
     virtual MEPScore add(int rank, int fitness) const = 0;
 };
 
-struct FitnessScore: public ScoreType
+struct MEPSHARED_EXPORT FitnessScore: public ScoreType
 {
     MEPScore add(int rank, int fitness) const;
 };
 
-struct RankScore: public ScoreType
+struct MEPSHARED_EXPORT RankScore: public ScoreType
 {
     MEPScore add(int rank, int fitness) const;
 };

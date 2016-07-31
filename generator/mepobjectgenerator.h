@@ -1,12 +1,13 @@
 #ifndef MEPOBJECTGENERATOR_H
 #define MEPOBJECTGENERATOR_H
 
+#include "../mep_global.h"
 #include "generator.h"
 
 #include <map>
 #include <memory>
 
-class MEPObject;
+class MEPSHARED_EXPORT MEPObject;
 typedef std::shared_ptr<MEPObject> MEPObjectPtr;
 
 class MEPObjectGenerator

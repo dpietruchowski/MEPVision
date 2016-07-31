@@ -1,5 +1,5 @@
-#TEMPLATE = lib
-TEMPLATE = app
+TEMPLATE = lib
+#TEMPLATE = app
 TARGET = mep_vision
 CONFIG += console c++11
 CONFIG -= app_bundle
@@ -71,5 +71,20 @@ INSTALLS += library
     includes.path = $$_PRO_FILE_PWD_/../inc
     includes.files = $$_PRO_FILE_PWD_/*.h
 INSTALLS += includes
+    core.path = $$_PRO_FILE_PWD_/../inc/core
+    core.files += $$_PRO_FILE_PWD_/core/*.h
+INSTALLS += core
+    gene.path = $$_PRO_FILE_PWD_/../inc/gene
+    gene.files += $$_PRO_FILE_PWD_/gene/*.h
+INSTALLS += gene
+    fitness.path = $$_PRO_FILE_PWD_/../inc/fitness
+    fitness.files += $$_PRO_FILE_PWD_/fitness/*.h
+INSTALLS += fitness
+    generator.path = $$_PRO_FILE_PWD_/../inc/generator
+    generator.files += $$_PRO_FILE_PWD_/generator/*.h
+INSTALLS += generator
+    selection.path = $$_PRO_FILE_PWD_/../inc/selection
+    selection.files += $$_PRO_FILE_PWD_/selection/*.h
+INSTALLS += selection
 
 message($$OUT_PWD)

@@ -3,7 +3,7 @@
 
 #include "hausdorff.h"
 
-class HausdorffCanny: public Hausdorff
+class MEPSHARED_EXPORT HausdorffCanny: public Hausdorff
 {
 public:
     HausdorffCanny(std::string referenceImageName);

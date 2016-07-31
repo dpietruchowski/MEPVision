@@ -10,7 +10,6 @@
 //TODO For doing library for different types of result you can do
 //     class which implement for example function show, isvalid, clear
 //TODO Move result do Gene
-class MEPSHARED_EXPORT MEPGene;
 class MEPSHARED_EXPORT MEPGene : public MEPObject
 {
 public:
@@ -31,6 +30,7 @@ private:
     void showObjectTree(const std::string& id) const;
     void clearObjectResult();
     MEPObjectPtr cloneObject() const;
+    virtual bool isValidResults() const = 0;
 
     void runObject();
     int assessObject(MEPFitness&);
@@ -45,7 +45,6 @@ private:
     virtual int assessGene(MEPFitness&) const = 0;
 
     virtual void runGene(const Children&) = 0;
-    virtual bool isValidResult() const = 0;
     virtual MEPObjectPtr mutate() const = 0;
 
 private:

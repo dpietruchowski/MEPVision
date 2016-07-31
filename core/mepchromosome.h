@@ -6,7 +6,7 @@
 #include <vector>
 
 //TODO Implement initialize function
-class MEPChromosome : public MEPComposite
+class MEPSHARED_EXPORT MEPChromosome : public MEPComposite
 {
 public:
     MEPChromosome(const MEPId&, int initSize);

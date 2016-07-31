@@ -1,13 +1,11 @@
 #ifndef MEPOBJECT_H
 #define MEPOBJECT_H
 
-#include "mep_global.h"
-#include "meptypes.h"
-#include "generator/mepgenerator.h"
-#include "fitness/mepfitness.h"
-#include "selection/mepselection.h"
-//#include "reproduction/mutation.h"
-//#include "reproduction/crossover.h"
+#include "../mep_global.h"
+#include "../meptypes.h"
+#include "../generator/mepgenerator.h"
+#include "../fitness/mepfitness.h"
+#include "../selection/mepselection.h"
 
 #include <string>
 #include <memory>
@@ -17,6 +15,17 @@
 //     Swap function of derived class will invoke swap function from higher class
 //     in class hierarchy
 //TODO Add virtual destructor
+//TODO Think about better name for MEPState enum
+//TODO MEPSORTED is whether composite is sorted or object is sorted
+typedef enum {
+    MEPCREATED = 0,
+    MEPDONE = 1,
+    MEPCLEARED = 2,
+    MEPASSESSED = 3,
+    MEPCLEAREDSORTED = 2,
+    MEPCOMPLITED = 7,
+    MEPUNDEFINED = -1
+} MEPState;
 class MEPGenerator;
 class MEPFitness;
 
@@ -26,31 +35,37 @@ class MEPSHARED_EXPORT MEPObject
 {
 public:
     MEPObject(const MEPId&);
+        /// Operators
     //Check if the same id;
     bool operator ==(const MEPObject&) const;
     bool operator <(const MEPObject&) const;
     bool operator ==(const int& rank) const;
     bool operator ==(const MEPId& id) const;
+        /// Interface
     void show() const;
     void showTree() const;
     std::string write() const;
     void clearResults();
     void setAsNext(const MEPObject&);
+    void setAsFirst();
     MEPObjectPtr clone() const;
+        /// Getters and isers
     int getScore() const;
     const MEPId& getId() const;
-    void addToSelection(MEPSelection&) const;
-
+    MEPState getState() const;
+    bool isClone(const MEPObject&) const;
+    virtual bool isValidResults() const = 0;
+    virtual bool isValid() const = 0;
+        /// For algorithm
     virtual void init(MEPGenerator&) {}
     void run();
     void assess(MEPFitness&);
+    void addToSelection(MEPSelection&) const;
 
 protected:
     MEPObject(const MEPObject& rhs);
     void swap(MEPObject&);
     void write(std::string&) const;
-private:
-    void sort();
 private:
     virtual void writeObject(std::string&) const = 0;
     virtual void showObject(const std::string& id) const = 0;
@@ -62,8 +77,6 @@ private:
     virtual int assessObject(MEPFitness&) = 0;
 private:
     MEPId id_;
-    //For debbuging
-    //MEPId ownerId_;
     int score_;
     int rank_;
 

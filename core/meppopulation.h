@@ -4,7 +4,7 @@
 #include "mepcomposite.h"
 
 //TODO Implement function
-class MEPPopulation : public MEPComposite
+class MEPSHARED_EXPORT MEPPopulation : public MEPComposite
 {
 public:
     MEPPopulation(const MEPId&, int initSize);

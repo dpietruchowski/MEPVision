@@ -3,7 +3,7 @@
 
 #include "mepselectiontypes.h"
 
-class MEPSelection
+class MEPSHARED_EXPORT MEPSelection
 {
 public:
     MEPSelection(ScoreType*);

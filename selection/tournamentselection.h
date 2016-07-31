@@ -3,7 +3,7 @@
 
 #include "mepselection.h"
 
-class TournamentSelection: public MEPSelection
+class MEPSHARED_EXPORT TournamentSelection: public MEPSelection
 {
 public:
     TournamentSelection(int tournamentSize);

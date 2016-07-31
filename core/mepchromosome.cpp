@@ -31,17 +31,18 @@ void MEPChromosome::initComposite(MEPGenerator& generator, int size)
     for(int i = 0; i < 2; i++)
     {
         MEPObjectPtr gene;
-        while(dynamic_cast<MEPGene&>(*gene).getNArguments() == 0)
+        gene = generator.create(*this);
+        while(dynamic_cast<MEPGene&>(*gene).getNArguments() != 0)
             gene = generator.create(*this);
         addObject(gene);
     }
-    for(int i = 0; i < size; i++)
+    for(int i = 2; i < size; i++)
     {
         MEPObjectPtr gene = generator.create(*this);
         addObject(gene);
         for(int k = 0; k < dynamic_cast<MEPGene&>(*gene).getNArguments(); k++)
         {
-    	int childNumber = rand() % i;
+            int childNumber = rand() % i;
             addChild(dynamic_cast<MEPGene&>(*gene), childNumber);
         }
     }

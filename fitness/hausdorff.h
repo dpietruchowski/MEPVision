@@ -3,7 +3,7 @@
 
 #include "mepfitness.h"
 
-class Hausdorff: public MEPFitness
+class MEPSHARED_EXPORT Hausdorff: public MEPFitness
 {
 public:
     Hausdorff(std::string referenceImageName);

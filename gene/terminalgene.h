@@ -7,7 +7,7 @@
 
 
 //TODO In constructor: Gene() instead of Gene(MEPId())
-class TerminalGene: public Gene
+class MEPSHARED_EXPORT TerminalGene: public Gene
 {
 public:
     static TerminalSet& getTerminalSet();

@@ -58,7 +58,7 @@ int TerminalGene::getGeneNArguments() const
     return 0;
 }
 
-void TerminalGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst)
+void TerminalGene::runGene(const std::vector<cv::Mat>&, cv::Mat& dst)
 {
     terminal_->copyTo(dst);
 }

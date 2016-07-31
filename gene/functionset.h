@@ -1,11 +1,13 @@
 #ifndef FUNCTIONSET_H
 #define FUNCTIONSET_H
 
+#include "../mep_global.h"
+
 #include <vector>
 #include <map>
 #include <opencv2/imgproc/imgproc.hpp>
 
-struct FunctionId
+struct MEPSHARED_EXPORT FunctionId
 {
     std::string name;
     int nArguments;
@@ -13,7 +15,7 @@ struct FunctionId
 
 typedef int(*FunctionPtr) (const std::vector<cv::Mat>&, cv::Mat&);
 
-class FunctionSet
+class MEPSHARED_EXPORT FunctionSet
 {
 public:
     static const int MAX_N_ARGUMENTS = 2;

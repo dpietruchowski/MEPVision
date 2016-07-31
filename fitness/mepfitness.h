@@ -1,11 +1,13 @@
 #ifndef MEPFITNESS_H
 #define MEPFITNESS_H
 
+#include "../mep_global.h"
+
 #include <memory>
 #include <vector>
 #include <opencv2/core/core.hpp>
 
-class MEPFitness
+class MEPSHARED_EXPORT MEPFitness
 {
 public:
     MEPFitness(std::string referenceImageName);

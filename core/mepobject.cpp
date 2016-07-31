@@ -6,13 +6,13 @@
 using namespace std;
 
 MEPObject::MEPObject(const MEPId& id):
-    id_(id), score_(std::numeric_limits<int>::max()), rank_(0),
+    id_(id), score_(std::numeric_limits<int>::max()), rank_(-1),
     nClones_(new int(0))
 {
 }
 
 MEPObject::MEPObject(const MEPObject& rhs):
-    score_(std::numeric_limits<int>::max()), rank_(0)
+    score_(std::numeric_limits<int>::max()), rank_(-1)
 {
     nClones_ = rhs.nClones_;
     (*nClones_)++;
@@ -32,6 +32,11 @@ void MEPObject::swap(MEPObject& rhs)
 bool MEPObject::operator ==(const MEPObject& rhs) const
 {
     return id_ == rhs.id_;
+}
+
+bool MEPObject::isClone(const MEPObject& rhs) const
+{
+    return (id_.type == rhs.id_.type) && (id_.number == rhs.id_.number);
 }
 
 bool MEPObject::operator <(const MEPObject& rhs) const
@@ -62,25 +67,20 @@ void MEPObject::showTree() const
 void MEPObject::write(std::string& object) const
 {
     object += id_.toString();
-    int nSpaces = 15 - object.size();
+    int nSpaces = 20 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
     }
 
     object += to_string(rank_);
-    nSpaces = 38 - object.size();
+    nSpaces = 26 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
     }
     object += to_string(score_);
-    nSpaces = 61 - object.size();
-    for(int i = 0; i < nSpaces; i++)
-    {
-        object += " ";
-    }
-}
+   }
 
 std::string MEPObject::write() const
 {
@@ -95,6 +95,11 @@ std::string MEPObject::write() const
 void MEPObject::clearResults()
 {
     clearObjectResult();
+}
+
+void MEPObject::setAsFirst()
+{
+    rank_ = 0;
 }
 
 void MEPObject::setAsNext(const MEPObject& rhs)
@@ -132,4 +137,27 @@ const MEPId& MEPObject::getId() const
 void MEPObject::addToSelection(MEPSelection& selection) const
 {
     selection.add(rank_, score_);
+}
+
+MEPState MEPObject::getState() const
+{
+    bool result = isValidResults();
+    bool score = score_ < std::numeric_limits<int>::max();
+    bool sorted = rank_ >= 0;
+
+    int state = result | (score << 1) | (sorted << 2);
+    if(state == 0)
+        return MEPCREATED;
+    if(state == 1)
+        return MEPDONE;
+    if(state == 2)
+        return MEPCLEARED;
+    if(state == 3)
+        return MEPASSESSED;
+    if(state == 6)
+        return MEPCLEAREDSORTED;
+    if(state == 7)
+        return MEPCOMPLITED;
+
+    return MEPUNDEFINED;
 }

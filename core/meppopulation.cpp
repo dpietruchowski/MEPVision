@@ -39,7 +39,7 @@ MEPObjectPtr MEPPopulation::cloneObject() const
     return MEPObjectPtr( new MEPPopulation(*this) );
 }
 
-void MEPPopulation::cloneCompositeObject(const MEPComposite& rhs,
+void MEPPopulation::cloneCompositeObject(const MEPComposite&,
                                          const MEPObject& object,
                                          const Objects&)
 {

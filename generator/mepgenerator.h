@@ -3,11 +3,11 @@
 
 #include "mepobjectgenerator.h"
 
-class MEPChromosome;
-class MEPPopulation;
+class MEPSHARED_EXPORT MEPChromosome;
+class MEPSHARED_EXPORT MEPPopulation;
 //TODO Register callback to create Chromosome,
 //     Function Gene, Terminal Gene, Population.
-class MEPGenerator
+class MEPSHARED_EXPORT MEPGenerator
 {
 public:
     MEPGenerator();

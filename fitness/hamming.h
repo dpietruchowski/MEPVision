@@ -3,7 +3,7 @@
 
 #include "mepfitness.h"
 
-class Hamming: public MEPFitness
+class MEPSHARED_EXPORT Hamming: public MEPFitness
 {
 public:
     Hamming(std::string referenceImageName);

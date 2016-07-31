@@ -3,7 +3,7 @@
 
 #include "mepselection.h"
 
-class RouletteSelection: public MEPSelection
+class MEPSHARED_EXPORT RouletteSelection: public MEPSelection
 {
 public:
     RouletteSelection(ScoreType*);
@@ -13,13 +13,13 @@ private:
     void calcScores(Scores&, int worstScore);
 };
 
-class RankRouletteSelection: public RouletteSelection
+class MEPSHARED_EXPORT RankRouletteSelection: public RouletteSelection
 {
 public:
     RankRouletteSelection(): RouletteSelection(new RankScore()) {}
 };
 
-class FitnessRouletteSelection: public RouletteSelection
+class MEPSHARED_EXPORT FitnessRouletteSelection: public RouletteSelection
 {
 public:
     FitnessRouletteSelection(): RouletteSelection(new FitnessScore()) {}
