@@ -23,6 +23,7 @@ public:
 
 private:
     Generator<CreateObjectFunction> generator_;
+    int objectCounter_;
 };
 
 #endif // MEPOBJECTGENERATOR_H

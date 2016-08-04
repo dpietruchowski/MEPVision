@@ -57,7 +57,27 @@ void MEPGene::writeObject(std::string& object) const
     {
         spaces += " ";
     }
-    //TODO TU JEST BUG WYPISUJE WSZYSTKIE DZIECI DZIECI
+}
+
+void MEPGene::writeObjectTree(std::string &object) const
+{
+    if(isValid() == false)
+        throw std::string("MEPGene::writeObject: Object is invalid");
+
+    int nSpaces = 40 - object.size();
+    for(int i = 0; i < nSpaces; i++)
+    {
+        object += " ";
+    }
+
+    writeGene(object);
+    object += "\n";
+    string spaces = "";
+    for(int i = 0; i < 6; i++)
+    {
+        spaces += " ";
+    }
+
     for(const auto& child: children_)
     {
         object += spaces;

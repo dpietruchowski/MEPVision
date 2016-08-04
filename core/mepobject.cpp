@@ -80,7 +80,7 @@ void MEPObject::write(std::string& object) const
         object += " ";
     }
     object += to_string(score_);
-   }
+}
 
 std::string MEPObject::write() const
 {
@@ -88,6 +88,16 @@ std::string MEPObject::write() const
 
     write(object);
     writeObject(object);
+
+    return object;
+}
+
+string MEPObject::writeTree() const
+{
+    string object;
+
+    write(object);
+    writeObjectTree(object);
 
     return object;
 }

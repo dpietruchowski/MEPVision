@@ -197,6 +197,20 @@ void MEPComposite::writeObject(std::string& object) const
     }
 }
 
+void MEPComposite::writeObjectTree(std::string& object) const
+{
+    if(!isValid())
+        throw std::string("MEPComposite::writeObject: Object is invalid");
+
+    object += "\n";
+    for(const auto& obj: objects_)
+    {
+        object += "   ";
+        string sobj = obj->writeTree();
+        object += obj->writeTree();
+    }
+}
+
 void MEPComposite::showObject(const string&) const
 {
     if(!isValid())

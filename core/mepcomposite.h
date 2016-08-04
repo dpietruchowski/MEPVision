@@ -44,6 +44,7 @@ private:
     void sort();
     //Dziedziczace po MEPObject
     void writeObject(std::string&) const;
+    void writeObjectTree(std::string&) const;
     void showObject(const std::string& id) const;
     void showObjectTree(const std::string& id) const;
     void clearObjectResult();

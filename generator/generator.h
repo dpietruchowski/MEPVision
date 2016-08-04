@@ -30,7 +30,7 @@ Generator<T>::Generator()
 
 template <typename T>
 void Generator<T>::registerCallback(double probability,
-                                 T callback)
+                                    T callback)
 {
     if(callbacks_.empty())
     {
