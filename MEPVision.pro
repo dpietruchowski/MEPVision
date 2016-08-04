@@ -1,5 +1,5 @@
-TEMPLATE = lib
-#TEMPLATE = app
+#TEMPLATE = lib
+TEMPLATE = app
 TARGET = mep_vision
 CONFIG += console c++11
 CONFIG -= app_bundle
@@ -36,7 +36,14 @@ SOURCES += main.cpp \
     selection/mepselectiontypes.cpp \
     selection/mepselection.cpp \
     selection/rouletteselection.cpp \
-    selection/tournamentselection.cpp
+    selection/tournamentselection.cpp \
+    operation/mepoperationtypes.cpp \
+    operation/mepoperation.cpp \
+    operation/mepmutation.cpp \
+    operation/mepcrossover.cpp \
+    operation/attributemutation.cpp \
+    operation/argumentmutation.cpp \
+    operation/combinedmutation.cpp
 
 HEADERS += \
     mep_global.h \
@@ -63,7 +70,15 @@ HEADERS += \
     selection/mepselectiontypes.h\
     selection/mepselection.h \
     selection/rouletteselection.h \
-    selection/tournamentselection.h
+    selection/tournamentselection.h \
+    operation/mepoperationtypes.h \
+    operation/mepoperation.h \
+    operation/mepmutation.h \
+    operation/mepcrossover.h \
+    operation/attributemutation.h \
+    operation/argumentmutation.h \
+    operation/combinedmutation.h
+
 
     library.path = $$_PRO_FILE_PWD_/../lib
     library.files = $$OUT_PWD/*.so*

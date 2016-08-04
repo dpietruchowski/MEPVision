@@ -7,6 +7,9 @@
 #include <string>
 #include <sstream>
 #include <iomanip>
+#include <vector>
+#include <functional>
+#include <algorithm>
 
 #define X_DEFINE_ENUM_TOSTRING_CASE(r, data, elem)    \
 case elem : return BOOST_PP_STRINGIZE(elem);

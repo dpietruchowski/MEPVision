@@ -15,7 +15,7 @@ private:
     void clearGeneResult();
     void showGene(const std::string& windowName) const;
 
-    void runGene(const Children&);
+    void runGene(const MEPGenes&);
     int assessGene(MEPFitness&) const;
 private:
     virtual MEPObjectPtr cloneGene() const = 0;

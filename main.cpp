@@ -1,4 +1,7 @@
 #include <iostream>
+#include <cstdlib>
+#include <cstdio>
+#include <ctime>
 
 #include "core/mepchromosome.h"
 #include "generator/mepgenerator.h"
@@ -6,30 +9,52 @@
 #include "gene/terminalgene.h"
 #include "opencv2/highgui/highgui.hpp"
 #include "fitness/hausdorff.h"
+#include "operation/mepoperationtypes.h"
 
 using namespace std;
 
+static void createGenerator(MEPGenerator& generator)
+{
+   generator.registerGene(0.8, FunctionGene::create);
+   generator.registerGene(0.2, TerminalGene::create);
+}
+
 int main()
 {
-    srand(0);
-    cout << "Blabla" << endl;
-    MEPId id = {MEPCHROMOSOME, 0, 0};
-    int size = 5;
-    MEPChromosome chromosome({MEPCHROMOSOME, 0, 0}, size);
-
+    //srand(time( NULL ));
+    OperationPointsType* pointsType = new BetterGenePoints();
+    MEPChromosome chromosome1({MEPCHROMOSOME, 0, 0}, 10);
+    MEPChromosome chromosome2({MEPCHROMOSOME, 1, 0}, 10);
     MEPGenerator generator;
-    generator.registerGene(0.8, FunctionGene::create); // all function included
-    generator.registerGene(0.2, TerminalGene::create); // terminal should be kangaroo
+    createGenerator(generator);
+    MEPFitness *fitness = new Hausdorff("kangur_ref.png");
 
-    Hausdorff fitness("kangur_ref.png");
+    chromosome1.init(generator);
+    chromosome1.run();
+    chromosome1.assess(*fitness);
+    chromosome1.find(0).show();
+    chromosome2.init(generator);
+    chromosome2.run();
+    chromosome2.assess(*fitness);
+    chromosome2.find(0).show();
 
-    chromosome.init(generator);
-    chromosome.run();
-   // chromosome.assess(fitness);
-    string sChromosome = chromosome.write();
+    cout<<chromosome1.write()<<endl;
+    cout<<chromosome2.write()<<endl;
 
-    cout << sChromosome << endl;
-    cv::waitKey();
+    MEPChromosomes parents;
+
+    parents.push_back(chromosome1);
+    parents.push_back(chromosome2);
+
+    pointsType->calcPoints(parents);
+    const Points& points = pointsType->getOperationPoints();
+
+    for(const auto& p: points)
+        cout << p << " ";
+    cout << endl;
+
+    cv::waitKey(0);
+
     return 0;
 }
 

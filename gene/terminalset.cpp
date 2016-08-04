@@ -28,5 +28,3 @@ void TerminalSet::setInputImage(std::string inputImage)
     if(inputImage_->empty())
         throw "Terminal pusty";
 }
-
-

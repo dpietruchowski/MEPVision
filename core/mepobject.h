@@ -6,6 +6,7 @@
 #include "../generator/mepgenerator.h"
 #include "../fitness/mepfitness.h"
 #include "../selection/mepselection.h"
+#include "../functions.h"
 
 #include <string>
 #include <memory>
@@ -17,12 +18,15 @@
 //TODO Add virtual destructor
 //TODO Think about better name for MEPState enum
 //TODO MEPSORTED is whether composite is sorted or object is sorted
+class MEPObject;
+typedef std::vector<std::reference_wrapper<MEPObject>> MEPObjects;
+
 typedef enum {
     MEPCREATED = 0,
     MEPDONE = 1,
     MEPCLEARED = 2,
     MEPASSESSED = 3,
-    MEPCLEAREDSORTED = 2,
+    MEPCLEAREDSORTED = 6,
     MEPCOMPLITED = 7,
     MEPUNDEFINED = -1
 } MEPState;

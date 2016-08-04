@@ -5,6 +5,8 @@
 
 #include <vector>
 
+class MEPChromosome;
+typedef std::vector<std::reference_wrapper<const MEPChromosome>> MEPChromosomes;
 //TODO Implement initialize function
 class MEPSHARED_EXPORT MEPChromosome : public MEPComposite
 {
@@ -15,11 +17,14 @@ public:
     void swap(MEPComposite&);
 
 private:
+    virtual void addObject(Objects&, MEPObject&, std::vector<int>&);
     void initComposite(MEPGenerator&, int size);
     MEPObjectPtr cloneObject() const;
     void cloneCompositeObject(const MEPComposite& rhs,
-                              const MEPObject&,
-                              const Objects&);
+                              int objectNumber);
+    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&) const;
 };
+
+void dynamicCast(MEPObjects &objects, MEPChromosomes &chromosomes);
 
 #endif // MEPCHROMOSOME_H

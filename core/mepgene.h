@@ -7,13 +7,14 @@
 #include <vector>
 #include <functional>
 
+class MEPGene;
+typedef std::vector<std::reference_wrapper<MEPGene>> MEPGenes;
 //TODO For doing library for different types of result you can do
 //     class which implement for example function show, isvalid, clear
 //TODO Move result do Gene
 class MEPSHARED_EXPORT MEPGene : public MEPObject
 {
 public:
-    typedef std::vector<std::reference_wrapper<MEPGene>> Children;
     MEPGene(const MEPId& id, int size);
     int getNArguments() const;
     bool isValid() const;
@@ -44,12 +45,14 @@ private:
 
     virtual int assessGene(MEPFitness&) const = 0;
 
-    virtual void runGene(const Children&) = 0;
+    virtual void runGene(const MEPGenes&) = 0;
     virtual MEPObjectPtr mutate() const = 0;
 
 private:
-    Children children_;
+    MEPGenes children_;
     int size_;
 };
+
+void dynamicCast(MEPObjects &objects, MEPGenes &genes);
 
 #endif // MEPGENE_H

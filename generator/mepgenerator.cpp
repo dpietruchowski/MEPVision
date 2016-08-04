@@ -5,17 +5,17 @@ MEPGenerator::MEPGenerator()
 
 }
 
-MEPObjectPtr MEPGenerator::create(const MEPChromosome&) //Creates Gene
+MEPObjectPtr MEPGenerator::createGene() //Creates Gene
 {
     return geneGenerator_.createRandomPtr();
 }
 
-MEPObjectPtr MEPGenerator::create(const MEPPopulation&) //Creates Chromosome
+MEPObjectPtr MEPGenerator::createChromosome() //Creates Chromosome
 {
     return chromosomeGenerator_.createRandomPtr();
 }
 
-MEPObjectPtr MEPGenerator::create() //Creates Population
+MEPObjectPtr MEPGenerator::createPopulation() //Creates Population
 {
     return populationGenerator_.createRandomPtr();
 }

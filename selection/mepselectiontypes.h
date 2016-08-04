@@ -4,6 +4,13 @@
 #include "../mep_global.h"
 #include <vector>
 
+enum MEPSelectionType
+{
+    FITNESS_ROULETTESELECTION,
+    RANK_ROULETTESELECTION,
+    TOURNAMENTSELECTION
+};
+
 struct MEPSHARED_EXPORT MEPScore
 {
     int rank;

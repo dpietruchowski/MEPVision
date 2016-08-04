@@ -2,6 +2,7 @@
 #define MEPPOPULATION_H
 
 #include "mepcomposite.h"
+#include "../operation/mepoperation.h"
 
 //TODO Implement function
 class MEPSHARED_EXPORT MEPPopulation : public MEPComposite
@@ -11,13 +12,14 @@ public:
     MEPPopulation(const MEPPopulation&);
     MEPPopulation& operator =(const MEPPopulation&);
     void swap(MEPPopulation&);
+    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&, MEPOperation&) const;
 
 private:
     void initComposite(MEPGenerator&, int size);
     MEPObjectPtr cloneObject() const;
     void cloneCompositeObject(const MEPComposite& rhs,
-                              const MEPObject&,
-                              const Objects&);
+                              int objectNumber);
+    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&) const;
 
 };
 

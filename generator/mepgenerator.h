@@ -12,9 +12,9 @@ class MEPSHARED_EXPORT MEPGenerator
 public:
     MEPGenerator();
 
-    MEPObjectPtr create(const MEPChromosome&); //Creates Gene
-    MEPObjectPtr create(const MEPPopulation&); //Creates Chromosome
-    MEPObjectPtr create(); //Creates Population
+    MEPObjectPtr createGene();
+    MEPObjectPtr createChromosome();
+    MEPObjectPtr createPopulation();
 
     void registerGene(double probability, MEPObjectGenerator::CreateObjectFunction);
     void registerChromosome(MEPObjectGenerator::CreateObjectFunction);

@@ -36,7 +36,7 @@ int Gene::assessGene(MEPFitness& fitness) const
     return fitness.measure(result_);
 }
 
-void Gene::runGene(const Children& children)
+void Gene::runGene(const MEPGenes& children)
 {
     std::vector<cv::Mat> arg;
     for(const auto& child: children)

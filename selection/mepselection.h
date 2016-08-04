@@ -14,7 +14,7 @@ public:
     int getSelectedRank() const;
 private:
     virtual int select(const Scores&) const = 0;
-    virtual void calcScores(Scores&, int worstScore) const = 0;
+    virtual void calcScores(Scores&, int worstScore) = 0;
 private:
     Scores scores_;
     ScoreType* scoreType_;
