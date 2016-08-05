@@ -21,7 +21,7 @@ MEPGene::MEPGene(const MEPId& id, int size):
 }
 
 MEPGene::MEPGene(const MEPGene& rhs):
-    MEPObject(rhs)
+    MEPObject(rhs), size_(rhs.size_)
 {
 }
 

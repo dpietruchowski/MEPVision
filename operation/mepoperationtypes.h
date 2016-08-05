@@ -32,7 +32,7 @@ public:
 
 private:
     void calcPoints(const MEPChromosomes& parents, Points& points);
-    virtual int calcPoint(const MEPChromosomes& parents, int pointNumber) const = 0;
+    virtual int calcPoint(const MEPChromosomes& parents, int& pointNumber) const = 0;
 
 private:
     int nPoints_;
@@ -44,7 +44,7 @@ public:
     RandomPoints(int nPoints);
 
 private:
-    int calcPoint(const MEPChromosomes& parents, int pointNumber) const;
+    int calcPoint(const MEPChromosomes& parents, int& pointNumber) const;
 };
 
 
@@ -54,7 +54,7 @@ public:
     WorstPoints(int nPoints);
 
 private:
-    int calcPoint(const MEPChromosomes& parents, int pointNumber) const;
+    int calcPoint(const MEPChromosomes& parents, int& pointNumber) const;
 };
 
 class UniformPoints: public OperationPointsType

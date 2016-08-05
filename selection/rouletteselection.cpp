@@ -7,6 +7,8 @@ MEPSelection(scoreType)
 {
 }
 
+
+//TODO use library to choose by probabilities
 int RouletteSelection::select(const Scores& scores) const
 {
     double decision = ((double) std::rand() / (RAND_MAX));

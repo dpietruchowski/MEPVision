@@ -64,8 +64,10 @@ void MEPObject::showTree() const
     showObjectTree(id_.toString());
 }
 
-void MEPObject::write(std::string& object) const
+std::string MEPObject::writeObject() const
 {
+    std::string object;
+
     object += id_.toString();
     int nSpaces = 20 - object.size();
     for(int i = 0; i < nSpaces; i++)
@@ -80,13 +82,13 @@ void MEPObject::write(std::string& object) const
         object += " ";
     }
     object += to_string(score_);
+
+    return object;
 }
 
 std::string MEPObject::write() const
 {
-    string object;
-
-    write(object);
+    string object = writeObject();
     writeObject(object);
 
     return object;
@@ -94,9 +96,7 @@ std::string MEPObject::write() const
 
 string MEPObject::writeTree() const
 {
-    string object;
-
-    write(object);
+    string object = writeObject();
     writeObjectTree(object);
 
     return object;

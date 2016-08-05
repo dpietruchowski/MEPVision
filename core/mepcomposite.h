@@ -36,10 +36,10 @@ public:
 
     virtual MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&) const = 0;
     void reproduceCompositeObject(const MEPComposite& rhs, MEPSelectionType);
+    const MEPObject& select(MEPSelectionType) const;
 
 protected:
     void swap(MEPComposite&);
-    const MEPObject& select(MEPSelectionType) const;
 private:
     void sort();
     //Dziedziczace po MEPObject
@@ -61,6 +61,7 @@ private:
 private:
     Objects objects_;
     int size_;
+    Scores scores;
 };
 
 #endif // MEPCOMPOSITE_H

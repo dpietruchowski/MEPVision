@@ -25,6 +25,8 @@ MEPObjectPtr MEPOperation::reproduce(const MEPChromosomes parents,
     MEPObjectPtr child = generator.createChromosome();
 
     pointsType_->calcPoints(parents);
+    const Points& points = pointsType_->getOperationPoints();
+
     reproduce(parents, generator, pointsType_->getOperationPoints(),
               dynamic_cast<MEPChromosome&> (*child));
 

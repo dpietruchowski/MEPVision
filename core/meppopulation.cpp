@@ -1,5 +1,6 @@
 #include "meppopulation.h"
 #include "mepchromosome.h"
+#include "fitness/hamming.h"
 
 MEPPopulation::MEPPopulation(const MEPId& id, int initSize):
     MEPComposite(id, initSize)
@@ -31,17 +32,22 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
 {
     MEPObjectPtr child = generator.createPopulation();
     MEPComposite& childComposite = dynamic_cast<MEPComposite&> (*child);
-    for(int i = 0; i < childComposite.getSize(); ++i)
+    int i = 0;
+    while(child->isValid() == false)
     {
         MEPChromosomes parents;
         for(int k = 0; k < operation.getNParents(); ++k)
         {
-            parents.push_back(dynamic_cast<const MEPChromosome&> (select(type)));
+            const MEPObject& selected = select(type);
+            parents.push_back(dynamic_cast<const MEPChromosome&> (selected));
         }
 
         MEPObjectPtr reproduced = operation.reproduce(parents, generator);
         childComposite.addObject(reproduced);
+        i++;
     }
+
+    return child;
 }
 
 void MEPPopulation::initComposite(MEPGenerator& generator, int size)
@@ -73,11 +79,11 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
     MEPObjectPtr child = generator.createPopulation();
     MEPComposite& childComposite = dynamic_cast<MEPComposite&> (*child);
 
-    for(int i = 0; i < childComposite.getSize(); ++i)
+    while(child->isValid() == false)
     {
         MEPObjectPtr chromosome = generator.createChromosome();
         MEPComposite& chromosomeComposite = dynamic_cast<MEPComposite&> (*chromosome);
-        for(int k = 0; k < chromosomeComposite.getSize(); ++k)
+        while(chromosome->isValid() == false)
         {
             const MEPComposite& selectedChromosome = dynamic_cast<const MEPComposite&>
                                                      (select(type));

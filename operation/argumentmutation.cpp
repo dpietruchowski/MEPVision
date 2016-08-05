@@ -13,7 +13,7 @@ void ArgumentMutation::addMutated(const MEPChromosome &parent,
     MEPObjectPtr mutated = parent.getObject(child.getSize()).clone();
 
     std::vector<int> args;
-    for(int i = 0; dynamic_cast<MEPGene&> (*mutated).getNArguments(); ++i)
+    for(int i = 0; i < dynamic_cast<MEPGene&> (*mutated).getNArguments(); ++i)
     {
         args.push_back(std::rand() % child.getSize());
     }

@@ -42,13 +42,16 @@ void NPointsControl::calcPoints(const MEPChromosomes& parents, Points& points)
         throw std::string("Za duzo punktow");
 
     Points::iterator it = points.begin();
+    int poinNumber = maxPoint - 1;
     for(int i = 0; i < nPoints_; i++)
     {
-        int calcedPoint = calcPoint(parents, maxPoint - i - 1);
+        if(poinNumber < 0)
+            break;
+        int calcedPoint = calcPoint(parents, poinNumber);
         it = std::find(points.begin(), points.end(), calcedPoint);
         while(it != points.end())
         {
-            calcedPoint = calcPoint(parents, maxPoint - i - 1);
+            calcedPoint = calcPoint(parents, poinNumber);
             it = std::find(points.begin(), points.end(), calcedPoint);
         }
         points.push_back(calcedPoint);
@@ -60,7 +63,7 @@ RandomPoints::RandomPoints(int nPoints):
 {
 }
 
-int RandomPoints::calcPoint(const MEPChromosomes& parents, int) const
+int RandomPoints::calcPoint(const MEPChromosomes& parents, int&) const
 {
     int maxPoint = parents[0].get().getSize();
     for(int i = 1; i < static_cast<int>(parents.size()); ++i)
@@ -79,7 +82,7 @@ WorstPoints::WorstPoints(int nPoints):
 {
 }
 
-int WorstPoints::calcPoint(const MEPChromosomes& parents, int pointNumber) const
+int WorstPoints::calcPoint(const MEPChromosomes& parents, int &pointNumber) const
 {
     int nParents = static_cast<int>(parents.size());
     if(nParents != 1)
@@ -88,7 +91,15 @@ int WorstPoints::calcPoint(const MEPChromosomes& parents, int pointNumber) const
     if(parents[0].get().getState() < MEPASSESSED)
         throw std::string("WorstPoints::calcPoint:: wrong object state");
 
-    return parents[0].get().find(parents[0].get().find(pointNumber));
+    int calced = parents[0].get().find(parents[0].get().find(pointNumber));
+    pointNumber--;
+    while(calced < 2)
+    {
+        calced = parents[0].get().find(parents[0].get().find(pointNumber));
+        pointNumber--;
+    }
+
+    return calced;
 }
 
 UniformPoints::UniformPoints() 
@@ -98,12 +109,10 @@ UniformPoints::UniformPoints()
 void UniformPoints::calcPoints(const MEPChromosomes& parents, Points& points)
 {
     int nParents = static_cast<int>(parents.size());
-    if(nParents != 1)
-        throw std::string("UniformPoints::calcPoints: too many parents");
 
     int maxPoint = parents[0].get().getSize();
     int i = 0;
-    points.push_back(rand(0, maxPoint/2));
+    points.push_back(rand(2, maxPoint/2));
     Points::reverse_iterator it = points.rbegin();
     while(*points.rbegin() < (maxPoint - 2))
     {
@@ -125,8 +134,6 @@ void BetterGenePoints::calcPoints(const MEPChromosomes& parents, Points& points)
     std::vector<bool> comparison = parents[0].get().compare(parents[1].get(),
                                                     parents[0].get().getSize());
     bool temp = comparison[0];
-    if(temp == false)
-        points.push_back(0);
     int i = 0;
     for(const auto& comp: comparison)
     {

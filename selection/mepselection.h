@@ -11,6 +11,7 @@ public:
 
     void add(int rank, int score);
     void calcScores();
+    Scores getScores() { return scores_; }
     int getSelectedRank() const;
 private:
     virtual int select(const Scores&) const = 0;

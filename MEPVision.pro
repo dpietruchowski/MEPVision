@@ -77,7 +77,8 @@ HEADERS += \
     operation/mepcrossover.h \
     operation/attributemutation.h \
     operation/argumentmutation.h \
-    operation/combinedmutation.h
+    operation/combinedmutation.h \
+    operation/operation.h
 
 
     library.path = $$_PRO_FILE_PWD_/../lib

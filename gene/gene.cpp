@@ -36,6 +36,14 @@ int Gene::assessGene(MEPFitness& fitness) const
     return fitness.measure(result_);
 }
 
+cv::Mat Gene::getResult() const
+{
+    cv::Mat copy;
+    result_.copyTo(copy);
+
+    return copy;
+}
+
 void Gene::runGene(const MEPGenes& children)
 {
     std::vector<cv::Mat> arg;

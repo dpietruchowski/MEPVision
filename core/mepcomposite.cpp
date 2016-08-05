@@ -10,12 +10,14 @@ using namespace std;
 MEPComposite::MEPComposite(const MEPId& id, int size):
     MEPObject(id), size_(size)
 {
+    for(int i = 0; i < size; i++)
+        scores.push_back({0,0, 0.0});
 }
 
 MEPComposite::MEPComposite(const MEPComposite& rhs):
     MEPObject(rhs)
 {
-    clonePart(rhs, 0, objects_.size() - 1);
+    clonePart(rhs, 0, rhs.objects_.size() - 1);
 }
 
 void MEPComposite::swap(MEPComposite& rhs)
@@ -51,6 +53,7 @@ const MEPObject &MEPComposite::select(MEPSelectionType type) const
     }
 
     selection->calcScores();
+    const_cast<Scores&> (scores) = selection->getScores();
     const MEPObject& selected = find(selection->getSelectedRank());
 
     delete selection;
@@ -147,8 +150,8 @@ void MEPComposite::clonePart(const MEPComposite& rhs,
                              int startObjectNumber,
                              int endObjectNumber)
 {
-    if(!isValid())
-        throw std::string("MEPComposite::clonePart: Object is invalid");
+    if(isValid() == true)
+        throw std::string("MEPComposite::clonePart: Object is valid");
     
     if ( (startObjectNumber > endObjectNumber) ||
              (startObjectNumber >= rhs.getSize()))
@@ -189,11 +192,14 @@ void MEPComposite::writeObject(std::string& object) const
         throw std::string("MEPComposite::writeObject: Object is invalid");
     
     object += "\n";
+    int i = 0;
     for(const auto& obj: objects_)
     {
+        object += scores[i].toString();
         object += "   ";
-        string sobj = obj->write();
-        object += obj->write();
+        object += obj->writeObject();
+        object += "\n";
+        ++i;
     }
 }
 
@@ -206,7 +212,6 @@ void MEPComposite::writeObjectTree(std::string& object) const
     for(const auto& obj: objects_)
     {
         object += "   ";
-        string sobj = obj->writeTree();
         object += obj->writeTree();
     }
 }
@@ -237,7 +242,7 @@ void MEPComposite::runObject()
 {
     if(!isValid())
         throw std::string("MEPComposite::runObject: Object is invalid");
-    
+    std::cout << "." << std::flush;
     for(const auto& obj: objects_)
     {
         obj->run();
@@ -260,7 +265,8 @@ int MEPComposite::assessObject(MEPFitness& fitness)
 {
     if(!isValid())
         throw std::string("MEPComposite::assessObject: Object is invalid");
-    
+
+    std::cout << "." << std::flush;
     for(const auto& object: objects_)
     {
         object->assess(fitness);
@@ -286,17 +292,18 @@ bool MEPComposite::isValid() const
 
 std::vector<bool> MEPComposite::isObjectsClone(const MEPComposite& rhs)
 {
+    if(!isValid())
+        throw std::string("MEPComposite::isObjectsClone: Object is invalid");
     vector<bool> comparison;
-    int lowerSize = size_ < rhs.size_ ? size_ : rhs.size_;
-    int higherSize = size_ > rhs.size_ ? size_ : rhs.size_;
 
-    for(int i = 0; i < lowerSize; ++i)
+    for(int i = 0; i < size_; ++i)
     {
-        comparison.push_back(objects_[i]->isClone(*rhs.objects_[i]));
-    }
-    for(int i = lowerSize; i < higherSize; ++i)
-    {
-        comparison.push_back(false);
+        bool isClone = false;
+        for(int k = 0; k < rhs.size_; ++k)
+        {
+            isClone |= objects_[i]->isClone(*rhs.objects_[k]);
+        }
+        comparison.push_back(isClone);
     }
 
     return comparison;

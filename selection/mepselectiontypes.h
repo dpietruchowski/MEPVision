@@ -2,6 +2,7 @@
 #define MEPSELECTIONTYPES_H
 
 #include "../mep_global.h"
+#include "../meptypes.h"
 #include <vector>
 
 enum MEPSelectionType
@@ -17,6 +18,16 @@ struct MEPSHARED_EXPORT MEPScore
     int value;
     double normalized;
     MEPScore(int, int, double);
+    std::string toString() const
+    {
+        std::string sScore = std::to_string(rank);
+        sScore += " ";
+        sScore += to_string_with_precision(value, 3);
+        sScore += " ";
+        sScore += to_string_with_precision(normalized, 3);
+
+        return sScore;
+    }
 };
 typedef std::vector<MEPScore> Scores;
 

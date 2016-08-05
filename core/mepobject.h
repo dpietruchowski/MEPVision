@@ -50,6 +50,7 @@ public:
     void showTree() const;
     std::string write() const;
     std::string writeTree() const;
+    std::string writeObject() const;
     void clearResults();
     void setAsNext(const MEPObject&);
     void setAsFirst();
@@ -70,7 +71,6 @@ public:
 protected:
     MEPObject(const MEPObject& rhs);
     void swap(MEPObject&);
-    void write(std::string&) const;
 private:
     virtual void writeObject(std::string&) const = 0;
     virtual void writeObjectTree(std::string&) const = 0;

@@ -6,6 +6,9 @@
 
 class MEPSHARED_EXPORT Gene : public MEPGene
 {
+public:
+    cv::Mat getResult() const;
+
 protected:
     Gene(const MEPId&, int size);
     Gene(const Gene&);

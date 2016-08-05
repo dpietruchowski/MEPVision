@@ -67,6 +67,7 @@ FunctionSet::FunctionSet()
 
     addFunction("dilate");
     addFunction("erode");
+    addAllFunctions();
 }
 
 int FunctionSet::absDiff(const vector<Mat>& src, Mat& dst)
