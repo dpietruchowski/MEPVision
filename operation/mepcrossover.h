@@ -15,6 +15,7 @@ private:
 class UniformCrossover : public MEPCrossover
 {
 public:
+    static MEPOperation* create();
     UniformCrossover(): MEPCrossover(new UniformPoints()) {}
 };
 
@@ -27,12 +28,14 @@ public:
 class OnePointCrossover : public MEPCrossover
 {
 public:
+    static MEPOperation* create();
     OnePointCrossover(): MEPCrossover(new RandomPoints(2)) {}
 };
 
 class TwoPointCrossover : public MEPCrossover
 {
 public:
+    static MEPOperation* create();
     TwoPointCrossover(): MEPCrossover(new RandomPoints(1)) {}
 };
 

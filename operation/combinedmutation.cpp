@@ -12,10 +12,15 @@ void CombinedMutation::addMutated(const MEPChromosome &,
 {
     MEPObjectPtr mutated = generator.createGene();
     std::vector<int> args;
-    for(int i = 0; dynamic_cast<MEPGene&> (*mutated).getNArguments(); ++i)
+    for(int i = 0; i < dynamic_cast<MEPGene&> (*mutated).getNArguments(); ++i)
     {
         args.push_back(std::rand() % child.getSize());
     }
 
     child.MEPComposite::addObject(mutated, args);
+}
+
+MEPOperation *RandCombinedMutation::create()
+{
+    return new RandCombinedMutation(1 + rand() % 10);
 }

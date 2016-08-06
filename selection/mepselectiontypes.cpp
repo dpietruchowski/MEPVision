@@ -10,7 +10,7 @@ MEPScore FitnessScore::add(int rank, int fitness) const
     return MEPScore{rank, fitness, 0};
 }
 
-MEPScore RankScore::add(int rank, int fitness) const
+MEPScore RankScore::add(int rank, int) const
 {
     return MEPScore{rank, rank, 0};
 }

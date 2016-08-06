@@ -5,7 +5,7 @@
 using namespace std;
 using namespace cv;
 
-Mat FunctionSet::element_ = getStructuringElement(MORPH_ELLIPSE, Size(10,10));
+Mat FunctionSet::element_ = getStructuringElement(MORPH_ELLIPSE, Size(5,7));
 
 FunctionSet::FunctionSet()
 {
@@ -63,7 +63,7 @@ FunctionSet::FunctionSet()
     functionsNotAdded_.insert(p);
     f = make_pair(1, FunctionSet::hitMiss);
     p = make_pair("hitMiss", f);
-    //functionsNotAdded_.insert(p);      //        <-----------------nie dodana
+    functionsNotAdded_.insert(p);      //        <-----------------nie dodana
 
     addFunction("dilate");
     addFunction("erode");
@@ -277,9 +277,26 @@ int FunctionSet::hitMiss(const std::vector<Mat> &src, Mat &dst)
         throw exception;
     }
     const Mat& src1 = src[0];
-    //morphologyEx(src1, dst, MORPH_HITMISS, element_);
+
+    CV_Assert(src1.type() == CV_8U && src1.channels() == 1);
+
+    cv::Mat k1 = (element_ == 1) / 255;
+    cv::Mat k2 = (element_ == -1) / 255;
+
+    cv::normalize(src1, src1, 0, 1, cv::NORM_MINMAX);
+
+    cv::Mat e1, e2;
+    cv::erode(src1, e1, k1, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::Scalar(0));
+    cv::erode(1-src1, e2, k2, cv::Point(-1, -1), 1, cv::BORDER_CONSTANT, cv::Scalar(0));
+    if (countNonZero(k2) <= 0){
+        e2 = src1;
+    }
+    dst = e1 & e2;
+
     return 1;
 }
+
+
 
 pair<FunctionId,FunctionPtr> FunctionSet::getRandomFunction() const
 {

@@ -20,22 +20,26 @@ public:
     bool isValid() const;
     const MEPId& getChildId(int childNumber) const;
     void addChild(MEPGene&);
+    void runGeneTree();
 
 protected:
     MEPGene(const MEPGene&);
     void swap(MEPGene&);
 
 private:
+    void runObjectTree();
+    //TODO Wymyslec lepsza nazwe
+
     void writeObject(std::string&) const;
     void writeObjectTree(std::string&) const;
-    void showObject(const std::string& id) const;
-    void showObjectTree(const std::string& id) const;
+    void showObject(const std::string& id);
+//    void showObjectTree(const std::string& id) const;
     void clearObjectResult();
+    void clearObjectResultTree();
     MEPObjectPtr cloneObject() const;
     virtual bool isValidResults() const = 0;
 
-    void runObject();
-    int assessObject(MEPFitness&);
+    int runObject(MEPFitness&);
 
 private:
     //TerminalGene and FunctionGene must implement this functions
@@ -45,8 +49,8 @@ private:
     virtual MEPObjectPtr cloneGene() const = 0;
 
     virtual int assessGene(MEPFitness&) const = 0;
-
     virtual void runGene(const MEPGenes&) = 0;
+
     virtual MEPObjectPtr mutate() const = 0;
 
 private:

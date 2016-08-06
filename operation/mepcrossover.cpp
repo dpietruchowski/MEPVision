@@ -1,7 +1,5 @@
 #include "mepcrossover.h"
 
-static int debug = 0;
-
 MEPCrossover::MEPCrossover(OperationPointsType* pointsType):
     MEPOperation(pointsType, 2)
 {
@@ -29,3 +27,18 @@ void MEPCrossover::reproduce(const MEPChromosomes &parents,
                     parents[abs(nPoints-1)%2].get().getSize() - 1);
 }
 
+
+MEPOperation *TwoPointCrossover::create()
+{
+    return new TwoPointCrossover();
+}
+
+MEPOperation *OnePointCrossover::create()
+{
+    return new OnePointCrossover();
+}
+
+MEPOperation *UniformCrossover::create()
+{
+    return new UniformCrossover();
+}

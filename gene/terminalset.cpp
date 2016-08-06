@@ -2,8 +2,8 @@
 
 #include "opencv2/highgui/highgui.hpp"
 
-MatPtr TerminalSet::inputImage_( new cv::Mat(cv::imread("kangur.png")) );
-MatPtr TerminalSet::nullImage( new cv::Mat(cv::imread("null.png")) );
+MatPtr TerminalSet::inputImage_( new cv::Mat(cv::imread("kangur.png", 0)) );
+MatPtr TerminalSet::nullImage( new cv::Mat(cv::imread("null.png", 0)) );
 
 TerminalSet::TerminalSet()
 {
@@ -11,6 +11,7 @@ TerminalSet::TerminalSet()
 
 MatPtr TerminalSet::getRandomImage() const
 {
+    int type = inputImage_->type();
     if (inputImage_->empty() == true)
         throw "Nie wczytano poprawnie obazka";
     return inputImage_;

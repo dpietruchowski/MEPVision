@@ -39,7 +39,7 @@ void NPointsControl::calcPoints(const MEPChromosomes& parents, Points& points)
     }
 
     if(maxPoint < 2*nPoints_)
-        throw std::string("Za duzo punktow");
+        throw std::string("NPointsControl::calcPoints: Za duzo punktow");
 
     Points::iterator it = points.begin();
     int poinNumber = maxPoint - 1;

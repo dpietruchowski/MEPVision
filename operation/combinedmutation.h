@@ -14,6 +14,7 @@ private:
 class RandCombinedMutation: public CombinedMutation
 {
 public:
+    static MEPOperation* create();
     RandCombinedMutation(int nMutatedPoints):
         CombinedMutation(new RandomPoints(nMutatedPoints)) {}
 };

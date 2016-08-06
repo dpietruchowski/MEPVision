@@ -4,6 +4,11 @@
 using namespace std;
 using namespace cv;
 
+MEPFitness *HausdorffSmall::create()
+{
+    return new HausdorffSmall("kangur_ref.png");
+}
+
 HausdorffSmall::HausdorffSmall(string referenceImageName):
     Hausdorff(referenceImageName),
     width_(220), height_(100)

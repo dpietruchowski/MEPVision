@@ -69,7 +69,7 @@ int FunctionGene::getGeneNArguments() const
     return functionId_.nArguments;
 }
 
-void FunctionGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst)
+void FunctionGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst) const
 {
     function_(src, dst);
 }

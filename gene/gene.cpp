@@ -29,6 +29,7 @@ void Gene::clearGeneResult()
 void Gene::showGene(const std::string& windowName) const
 {
     cv::imshow(windowName, result_);
+    cv::waitKey();
 }
 
 int Gene::assessGene(MEPFitness& fitness) const

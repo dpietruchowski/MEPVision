@@ -1,6 +1,7 @@
 #include "mepcomposite.h"
 
 #include <string>
+#include <boost/range/adaptor/reversed.hpp>
 #include "../selection/rouletteselection.h"
 #include "../selection/tournamentselection.h"
 #include "../generator/mepgenerator.h"
@@ -197,7 +198,7 @@ void MEPComposite::writeObject(std::string& object) const
     {
         object += scores[i].toString();
         object += "   ";
-        object += obj->writeObject();
+        object += obj->write();
         object += "\n";
         ++i;
     }
@@ -216,40 +217,53 @@ void MEPComposite::writeObjectTree(std::string& object) const
     }
 }
 
-void MEPComposite::showObject(const string&) const
+void MEPComposite::showObject(const string&)
 {
     if(!isValid())
         throw std::string("MEPComposite::showObject: Object is invalid");
-    
+
     for(const auto& obj: objects_)
     {
         obj->show();
     }
 }
 
-void MEPComposite::showObjectTree(const string&) const
-{
-    if(!isValid())
-        throw std::string("MEPComposite::showObjectTree: Object is invalid");
+//void MEPComposite::showObjectTree(const string&) const
+//{
+//    if(!isValid())
+//        throw std::string("MEPComposite::showObjectTree: Object is invalid");
     
-    for(const auto& obj: objects_)
-    {
-        obj->showTree();
-    }
-}
+//    for(const auto& obj: objects_)
+//    {
+//        obj->showTree();
+//    }
+//}
 
-void MEPComposite::runObject()
+int MEPComposite::runObject(MEPFitness& fitness)
 {
     if(!isValid())
         throw std::string("MEPComposite::runObject: Object is invalid");
     std::cout << "." << std::flush;
-    for(const auto& obj: objects_)
+    //TODO od tylu
+    for(const auto& obj: boost::adaptors::reverse(objects_))
     {
-        obj->run();
+        obj->run(fitness);
     }
+    sort();
+    int i = 0;
+    int sum = 0;
+    for(const auto& obj: boost::adaptors::reverse(objects_))
+    {
+        sum+= obj->getScore();
+        i++;
+    }
+    sum=sum/i;
+    if(getId().type == MEPPOPULATION)
+        std::cout << "///////// Srednia ocena osobnika:" << sum << "/////////" << std::endl << std::endl;
+    return find(0).getScore();
 }
 
-void MEPComposite::clearObjectResult()
+void MEPComposite::clearObjectResults()
 {
     if(!isValid())
         throw std::string("MEPComposite::clearObjectResult: Object is invalid");
@@ -258,21 +272,6 @@ void MEPComposite::clearObjectResult()
     {
         obj->clearResults();
     }
-}
-
-
-int MEPComposite::assessObject(MEPFitness& fitness)
-{
-    if(!isValid())
-        throw std::string("MEPComposite::assessObject: Object is invalid");
-
-    std::cout << "." << std::flush;
-    for(const auto& object: objects_)
-    {
-        object->assess(fitness);
-    }
-    sort();
-    return find(0).getScore();
 }
 
 bool MEPComposite::isValid() const
@@ -329,9 +328,6 @@ std::vector<bool> MEPComposite::compare(const MEPComposite &rhs,
     vector<bool> comparison;
     for(int i = 0; i < size; i++)
     {
-        MEPObject& obj1 = *objects_[i];
-        MEPObject& obj2 = *rhs.objects_[i];
-
         if(*objects_[i] < *rhs.objects_[i])
             comparison.push_back(true);
         else

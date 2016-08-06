@@ -44,19 +44,13 @@ void MEPGene::writeObject(std::string& object) const
     if(isValid() == false)
         throw std::string("MEPGene::writeObject: Object is invalid");
 
-    int nSpaces = 40 - object.size();
+    int nSpaces = 52 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
     }
 
     writeGene(object);
-    object += "\n";
-    string spaces = "";
-    for(int i = 0; i < 6; i++)
-    {
-        spaces += " ";
-    }
 }
 
 void MEPGene::writeObjectTree(std::string &object) const
@@ -64,7 +58,7 @@ void MEPGene::writeObjectTree(std::string &object) const
     if(isValid() == false)
         throw std::string("MEPGene::writeObject: Object is invalid");
 
-    int nSpaces = 40 - object.size();
+    int nSpaces = 50 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
@@ -85,36 +79,54 @@ void MEPGene::writeObjectTree(std::string &object) const
     }
 }
 
-void MEPGene::showObject(const string& id) const
+void MEPGene::showObject(const string& id)
 {
     if(isValid() == false)
         throw std::string("MEPGene::showObject: Object is invalid");
 
+    runGeneTree();
+
     if(!isValidResults())
         throw std::string("MEPGene::showObject: TU BEDZIE ENUM");
     showGene(id);
+
+    clearObjectResult();
 }
 
-void MEPGene::showObjectTree(const string& id) const
-{
-    if(isValid() == false)
-        throw std::string("MEPGene::showObjectTree: Object is invalid");
+//void MEPGene::showObjectTree(const string& id) const
+//{
+//    if(isValid() == false)
+//        throw std::string("MEPGene::showObjectTree: Object is invalid");
 
-    showObject(id);
+//    showObject(id);
 
-    for(const auto& child: children_)
-    {
-        child.get().showTree();
-    }
-    cv::waitKey();
-}
+//    for(const auto& child: children_)
+//    {
+//        child.get().showTree();
+//    }
+//    cv::waitKey();
+//}
 
-void MEPGene::runObject()
+void MEPGene::runObjectTree()
 {
     if(isValid() == false)
         throw std::string("MEPGene::runObject: Object is invalid");
 
+    for(const auto& child: children_)
+    {
+        child.get().runObjectTree();
+    }
+
     runGene(children_);
+}
+
+void MEPGene::runGeneTree()
+{
+    runObjectTree();
+    for(const auto& child: children_)
+    {
+        child.get().clearObjectResultTree();
+    }
 }
 
 void MEPGene::clearObjectResult()
@@ -125,19 +137,19 @@ void MEPGene::clearObjectResult()
     clearGeneResult();
 }
 
-int MEPGene::assessObject(MEPFitness& fitness)
+void MEPGene::clearObjectResultTree()
 {
-    if(isValid() == false)
-        throw std::string("MEPGene::assessObject: Object is invalid");
-
-    return assessGene(fitness);
+    clearObjectResult();
+    for(auto& child: children_)
+    {
+        child.get().clearObjectResultTree();
+    }
 }
 
 bool MEPGene::isValid() const
 {
     return size_ == static_cast<int> (children_.size());
 }
-
 
 int MEPGene::getNArguments() const
 {
@@ -150,6 +162,19 @@ MEPObjectPtr MEPGene::cloneObject() const
         throw std::string("MEPGene::cloneObject: Object is invalid");
 
     return cloneGene();
+}
+
+int MEPGene::runObject(MEPFitness& fitness)
+{
+    if(isValid() == false)
+        throw std::string("MEPGene::runObject: Object is invalid");
+
+    if(isValidResults() == false)
+    {
+        runObjectTree();
+    }
+
+    return assessGene(fitness);
 }
 
 const MEPId& MEPGene::getChildId(int childNumber) const

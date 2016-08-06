@@ -33,6 +33,8 @@ inline MEPSHARED_EXPORT const char* enumToString(name v)                        
 }
 
 DEFINE_ENUM(MEPType,(MEPGENE)(MEPCHROMOSOME)(MEPPOPULATION)(MEPUNIDENTIFY))
+DEFINE_ENUM(MEPState,(MEPCREATED)(MEPDONE)(MEPCLEARED)(MEPASSESSED)       \
+            (MEPCLEAREDSORTED)(MEPCOMPLITED)(MEPUNDEFINED))
 
 template <typename T>
 std::string to_string_with_precision(const T a_value, const int n = 6)
@@ -45,10 +47,10 @@ std::string to_string_with_precision(const T a_value, const int n = 6)
 struct MEPSHARED_EXPORT MEPId
 {
     MEPType type;
-    int number;
-    int cloneNumber;
+    unsigned int number;
+    unsigned int cloneNumber;
     MEPId();
-    MEPId(MEPType, int, int);
+    MEPId(MEPType, unsigned int, unsigned int);
     bool operator ==(const MEPId&) const;
     std::string toString() const;
 };

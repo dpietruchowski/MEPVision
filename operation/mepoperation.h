@@ -7,7 +7,7 @@ class MEPOperation
 {
 public:
     MEPOperation(OperationPointsType*, int nParents);
-    ~MEPOperation();
+    virtual ~MEPOperation();
 
     MEPObjectPtr reproduce(const MEPChromosomes, MEPGenerator&);
     int getNParents() const;

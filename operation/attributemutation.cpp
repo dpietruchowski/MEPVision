@@ -38,3 +38,8 @@ void AttributeMutation::addMutated(const MEPChromosome &parent,
 
     child.MEPComposite::addObject(mutated, args);
 }
+
+MEPOperation *RandAttributeMutation::create()
+{
+    return new RandAttributeMutation(1 + rand() % 10);
+}

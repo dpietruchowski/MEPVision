@@ -35,7 +35,7 @@ void Generator<T>::registerCallback(double probability,
     if(callbacks_.empty())
     {
         CreationCounter<T> counter = { callback, 0 };
-        callbacks_.insert(make_pair(probability, counter));
+        callbacks_.insert(std::make_pair(probability, counter));
     } else
     {
         //Check if adding probability is greater than 1
@@ -48,7 +48,7 @@ void Generator<T>::registerCallback(double probability,
             throw "Nie mozna dodac. Za duze prawdopodobienstwo";
 
         CreationCounter<T> counter = { callback, 0 };
-        callbacks_.insert(make_pair(threshold, counter));
+        callbacks_.insert(std::make_pair(threshold, counter));
     }
 }
 

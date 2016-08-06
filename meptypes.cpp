@@ -9,7 +9,7 @@ MEPId::MEPId()
     cloneNumber = 0;
 }
 
-MEPId::MEPId(MEPType type, int number, int cloneNumber):
+MEPId::MEPId(MEPType type, unsigned int number, unsigned int cloneNumber):
     type(type), number(number), cloneNumber(cloneNumber)
 {
 }

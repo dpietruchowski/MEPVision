@@ -56,7 +56,7 @@ void MEPPopulation::initComposite(MEPGenerator& generator, int size)
     {
         std::vector<int> args;
         MEPObjectPtr chromosome = generator.createChromosome();
-        chromosome->init(generator);
+        dynamic_cast<MEPComposite&> (*chromosome).init(generator);
         addObject(chromosome, args);
     }
 }

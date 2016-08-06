@@ -6,6 +6,7 @@
 class MEPSHARED_EXPORT Hamming: public MEPFitness
 {
 public:
+    static MEPFitness* create();
     Hamming(std::string referenceImageName);
 
 private:

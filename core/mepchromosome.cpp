@@ -92,6 +92,8 @@ MEPObjectPtr MEPChromosome::reproduce(MEPSelectionType type,
     {
         childComposite.reproduceCompositeObject(*this, type);
     }
+
+    return child;
 }
 
 void MEPChromosome::addObject(Objects& genes,

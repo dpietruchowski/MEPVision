@@ -54,14 +54,19 @@ bool MEPObject::operator ==(const MEPId& id) const
     return id_ == id;
 }
 
-void MEPObject::show() const
+void MEPObject::show()
 {
     showObject(id_.toString());
 }
 
-void MEPObject::showTree() const
+//void MEPObject::showTree()
+//{
+//    showObjectTree(id_.toString());
+//}
+
+void MEPObject::clearResult()
 {
-    showObjectTree(id_.toString());
+    clearObjectResult();
 }
 
 std::string MEPObject::writeObject() const
@@ -69,14 +74,16 @@ std::string MEPObject::writeObject() const
     std::string object;
 
     object += id_.toString();
-    int nSpaces = 20 - object.size();
+    object += " ";
+    object += enumToString(getState());
+    int nSpaces = 35 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
     }
 
     object += to_string(rank_);
-    nSpaces = 26 - object.size();
+    nSpaces = 41 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
         object += " ";
@@ -117,9 +124,11 @@ void MEPObject::setAsNext(const MEPObject& rhs)
     rank_ = rhs.rank_ + 1;
 }
 
-void MEPObject::run()
+void MEPObject::run(MEPFitness& fitness)
 {
-    runObject();
+    score_ = runObject(fitness);
+    clearResult();
+    int a = 0;
 }
 
 MEPObjectPtr MEPObject::clone() const
@@ -127,11 +136,6 @@ MEPObjectPtr MEPObject::clone() const
     MEPObjectPtr objectClone = cloneObject();
 
     return objectClone;
-}
-
-void MEPObject::assess(MEPFitness& fitness)
-{
-    score_ = assessObject(fitness);
 }
 
 int MEPObject::getScore() const

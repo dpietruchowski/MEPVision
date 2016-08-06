@@ -6,6 +6,11 @@
 using namespace cv;
 using namespace std;
 
+MEPFitness *Hausdorff::create()
+{
+    return new Hausdorff("kangur_ref.png");
+}
+
 Hausdorff::Hausdorff(string referenceImageName):
     MEPFitness(referenceImageName)
 {
@@ -35,7 +40,7 @@ int Hausdorff::distance(const vector<Point> &a,
                                const vector<Point> &b) const
 {
     int maxDistAB = 0;
-    int k = 0;
+//    int k = 0;
     for (size_t i = 0; i < a.size(); i++)
     {
 //        if (i == k*1000)

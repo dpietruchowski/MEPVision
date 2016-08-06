@@ -21,15 +21,6 @@
 class MEPObject;
 typedef std::vector<std::reference_wrapper<MEPObject>> MEPObjects;
 
-typedef enum {
-    MEPCREATED = 0,
-    MEPDONE = 1,
-    MEPCLEARED = 2,
-    MEPASSESSED = 3,
-    MEPCLEAREDSORTED = 6,
-    MEPCOMPLITED = 7,
-    MEPUNDEFINED = -1
-} MEPState;
 class MEPGenerator;
 class MEPFitness;
 
@@ -39,6 +30,7 @@ class MEPSHARED_EXPORT MEPObject
 {
 public:
     MEPObject(const MEPId&);
+    virtual ~MEPObject() {}
         /// Operators
     //Check if the same id;
     bool operator ==(const MEPObject&) const;
@@ -46,12 +38,9 @@ public:
     bool operator ==(const int& rank) const;
     bool operator ==(const MEPId& id) const;
         /// Interface
-    void show() const;
-    void showTree() const;
     std::string write() const;
     std::string writeTree() const;
     std::string writeObject() const;
-    void clearResults();
     void setAsNext(const MEPObject&);
     void setAsFirst();
     MEPObjectPtr clone() const;
@@ -62,10 +51,13 @@ public:
     bool isClone(const MEPObject&) const;
     virtual bool isValidResults() const = 0;
     virtual bool isValid() const = 0;
+    void show();
+//    void showTree() const;
+    void clearResult();
+    void clearResults();
         /// For algorithm
     virtual void init(MEPGenerator&) {}
-    void run();
-    void assess(MEPFitness&);
+    void run(MEPFitness&);
     void addToSelection(MEPSelection&) const;
 
 protected:
@@ -74,13 +66,13 @@ protected:
 private:
     virtual void writeObject(std::string&) const = 0;
     virtual void writeObjectTree(std::string&) const = 0;
-    virtual void showObject(const std::string& id) const = 0;
-    virtual void showObjectTree(const std::string& id) const = 0;
-    virtual void clearObjectResult() = 0;
+    virtual void showObject(const std::string& id) = 0;
+//    virtual void showObjectTree(const std::string& id) const = 0;
+    virtual void clearObjectResult() {}
+    virtual void clearObjectResults() {}
     virtual MEPObjectPtr cloneObject() const = 0;
 
-    virtual void runObject() = 0;
-    virtual int assessObject(MEPFitness&) = 0;
+    virtual int runObject(MEPFitness&) = 0;
 private:
     MEPId id_;
     int score_;

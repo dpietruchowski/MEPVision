@@ -45,12 +45,11 @@ private:
     //Dziedziczace po MEPObject
     void writeObject(std::string&) const;
     void writeObjectTree(std::string&) const;
-    void showObject(const std::string& id) const;
-    void showObjectTree(const std::string& id) const;
-    void clearObjectResult();
+    void showObject(const std::string& id);
+//    void showObjectTree(const std::string& id) const;
+    void clearObjectResults();
 
-    void runObject();
-    int assessObject(MEPFitness&);
+    int runObject(MEPFitness& fitness);
 
     virtual void addObject(Objects&, MEPObject&, std::vector<int>&) {}
     virtual MEPObjectPtr cloneObject() const = 0;

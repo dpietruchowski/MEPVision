@@ -20,3 +20,8 @@ void ArgumentMutation::addMutated(const MEPChromosome &parent,
 
     child.MEPComposite::addObject(mutated, args);
 }
+
+MEPOperation *RandArgumentMutation::create()
+{
+    return new RandArgumentMutation(1 + rand() % 10);
+}

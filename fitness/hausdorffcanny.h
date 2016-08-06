@@ -6,6 +6,7 @@
 class MEPSHARED_EXPORT HausdorffCanny: public Hausdorff
 {
 public:
+    static MEPFitness* create();
     HausdorffCanny(std::string referenceImageName);
 
 private:

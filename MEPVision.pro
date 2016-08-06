@@ -43,7 +43,10 @@ SOURCES += main.cpp \
     operation/mepcrossover.cpp \
     operation/attributemutation.cpp \
     operation/argumentmutation.cpp \
-    operation/combinedmutation.cpp
+    operation/combinedmutation.cpp \
+    operation/mepoperationgenerator.cpp \
+    fitness/mepfitnessgenerator.cpp \
+    gene/morphogene.cpp
 
 HEADERS += \
     mep_global.h \
@@ -78,7 +81,10 @@ HEADERS += \
     operation/attributemutation.h \
     operation/argumentmutation.h \
     operation/combinedmutation.h \
-    operation/operation.h
+    operation/operation.h \
+    operation/mepoperationgenerator.h \
+    fitness/mepfitnessgenerator.h \
+    gene/morphogene.h
 
 
     library.path = $$_PRO_FILE_PWD_/../lib

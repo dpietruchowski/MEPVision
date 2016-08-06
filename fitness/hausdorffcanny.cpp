@@ -4,6 +4,11 @@
 using namespace std;
 using namespace cv;
 
+MEPFitness *HausdorffCanny::create()
+{
+    return new HausdorffCanny("kangur_ref.png");
+}
+
 HausdorffCanny::HausdorffCanny(string referenceImageName):
     Hausdorff(referenceImageName)
 {

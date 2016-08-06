@@ -14,6 +14,7 @@ private:
 class RandArgumentMutation: public ArgumentMutation
 {
 public:
+    static MEPOperation* create();
     RandArgumentMutation(int nMutatedPoints):
         ArgumentMutation(new RandomPoints(nMutatedPoints)) {}
 };

@@ -21,7 +21,7 @@ private:
     MEPObjectPtr cloneGene() const;
     void writeGene(std::string&) const;
     int getGeneNArguments() const;
-    void runGene(const std::vector<cv::Mat>&, cv::Mat&);
+    void runGene(const std::vector<cv::Mat>&, cv::Mat&) const;
     MEPObjectPtr mutate() const;
 private:
     TerminalGene(MatPtr image, MEPId id);
