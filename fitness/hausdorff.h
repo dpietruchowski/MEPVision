@@ -6,8 +6,9 @@
 class MEPSHARED_EXPORT Hausdorff: public MEPFitness
 {
 public:
-    static MEPFitness* create();
+    static MEPFitness* create(const cv::Mat& referenceImage);
     Hausdorff(std::string referenceImageName);
+    Hausdorff(const cv::Mat& referenceImage);
 
 private:
     virtual int fitness(cv::Mat &A, cv::Mat &B) const;

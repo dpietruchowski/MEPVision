@@ -3,6 +3,9 @@
 
 #include "mepoperationtypes.h"
 
+extern const int ChromosomeSize;
+extern const int PopulationSize;
+
 class MEPOperation
 {
 public:

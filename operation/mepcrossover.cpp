@@ -28,17 +28,22 @@ void MEPCrossover::reproduce(const MEPChromosomes &parents,
 }
 
 
-MEPOperation *TwoPointCrossover::create()
+MEPOperation *TwoPointCrossover::create(int)
 {
     return new TwoPointCrossover();
 }
 
-MEPOperation *OnePointCrossover::create()
+MEPOperation *OnePointCrossover::create(int)
 {
     return new OnePointCrossover();
 }
 
-MEPOperation *UniformCrossover::create()
+MEPOperation *UniformCrossover::create(int)
 {
     return new UniformCrossover();
+}
+
+MEPOperation *BetterGeneCrossover::create(int)
+{
+    return new BetterGeneCrossover();
 }

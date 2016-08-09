@@ -2,7 +2,7 @@
 #define MEPSELECTIONTYPES_H
 
 #include "../mep_global.h"
-#include "../meptypes.h"
+#include "../core/meptypes.h"
 #include <vector>
 
 enum MEPSelectionType

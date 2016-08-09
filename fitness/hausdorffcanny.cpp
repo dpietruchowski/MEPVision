@@ -4,9 +4,9 @@
 using namespace std;
 using namespace cv;
 
-MEPFitness *HausdorffCanny::create()
+MEPFitness *HausdorffCanny::create(const cv::Mat& referenceImage)
 {
-    return new HausdorffCanny("kangur_ref.png");
+    return new HausdorffCanny(referenceImage);
 }
 
 HausdorffCanny::HausdorffCanny(string referenceImageName):
@@ -14,8 +14,14 @@ HausdorffCanny::HausdorffCanny(string referenceImageName):
 {
 }
 
+HausdorffCanny::HausdorffCanny(const Mat &referenceImage):
+    Hausdorff(referenceImage)
+{
 
-void HausdorffCanny::transformImages(Mat &A, Mat &B)
+}
+
+
+void HausdorffCanny::transformImages(Mat &A, Mat &B) const
 {
     Canny(A, A, 20, 20*30);
     Canny(B, B, 20, 20*30);

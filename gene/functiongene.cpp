@@ -1,6 +1,6 @@
 #include "functiongene.h"
 
-#include "meptypes.h"
+#include "../core/meptypes.h"
 #include <memory>
 
 using namespace std;
@@ -35,13 +35,13 @@ FunctionGene::FunctionGene(const FunctionGene &functionGene):
 
 MEPObjectPtr FunctionGene::create(unsigned int geneNumber)
 {
-    MEPId id = {MEPGENE, geneNumber, 0};
+    MEPId id = {MEPFUNCTIONGENE, geneNumber, 0};
     return MEPObjectPtr(new FunctionGene(functions_.getRandomFunction(), id));
 }
 
 MEPObjectPtr FunctionGene::create(unsigned int geneNumber, int nArguments)
 {
-    MEPId id = {MEPGENE, geneNumber, 0};
+    MEPId id = {MEPFUNCTIONGENE, geneNumber, 0};
     return MEPObjectPtr(new FunctionGene(functions_.getRandomFunction(nArguments),
                                          id));
 }
@@ -55,6 +55,13 @@ void FunctionGene::setFunction(std::pair<FunctionId, FunctionPtr> p)
 MEPObjectPtr FunctionGene::cloneGene() const
 {
     return MEPObjectPtr( new FunctionGene(*this) );
+}
+
+void FunctionGene::saveGene(string &gene) const
+{
+    gene += "#";
+    gene += functionId_.name;
+    gene += "#";
 }
 
 void FunctionGene::writeGene(std::string& gene) const
@@ -72,11 +79,4 @@ int FunctionGene::getGeneNArguments() const
 void FunctionGene::runGene(const std::vector<cv::Mat>& src, cv::Mat& dst) const
 {
     function_(src, dst);
-}
-
-MEPObjectPtr FunctionGene::mutate() const
-{
-	MEPObjectPtr mutated = cloneGene();
-    dynamic_pointer_cast<FunctionGene> (mutated)->setFunction(functions_.getRandomFunction());
-	return mutated;
 }

@@ -2,11 +2,10 @@
 #define MEPOBJECT_H
 
 #include "../mep_global.h"
-#include "../meptypes.h"
+#include "meptypes.h"
 #include "../generator/mepgenerator.h"
 #include "../fitness/mepfitness.h"
 #include "../selection/mepselection.h"
-#include "../functions.h"
 
 #include <string>
 #include <memory>
@@ -38,6 +37,7 @@ public:
     bool operator ==(const int& rank) const;
     bool operator ==(const MEPId& id) const;
         /// Interface
+    std::string save() const;
     std::string write() const;
     std::string writeTree() const;
     std::string writeObject() const;
@@ -64,6 +64,7 @@ protected:
     MEPObject(const MEPObject& rhs);
     void swap(MEPObject&);
 private:
+    virtual void saveObject(std::string&) const = 0;
     virtual void writeObject(std::string&) const = 0;
     virtual void writeObjectTree(std::string&) const = 0;
     virtual void showObject(const std::string& id) = 0;

@@ -14,7 +14,7 @@ private:
 class RandArgumentMutation: public ArgumentMutation
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int nMutatedPoints);
     RandArgumentMutation(int nMutatedPoints):
         ArgumentMutation(new RandomPoints(nMutatedPoints)) {}
 };
@@ -22,6 +22,7 @@ public:
 class WorstArgumentMutation: public ArgumentMutation
 {
 public:
+    static MEPOperation* create(int nMutatedPoints);
     WorstArgumentMutation(int nMutatedPoints):
         ArgumentMutation(new WorstPoints(nMutatedPoints)) {}
 };
@@ -29,6 +30,7 @@ public:
 class UniformArgumentMutation: public ArgumentMutation
 {
 public:
+    static MEPOperation* create(int);
     UniformArgumentMutation():
         ArgumentMutation(new UniformPoints()) {}
 };

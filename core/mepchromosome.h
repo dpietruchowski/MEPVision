@@ -15,6 +15,8 @@ public:
     MEPChromosome(const MEPChromosome&);
     MEPChromosome& operator =(const MEPChromosome&);
     void swap(MEPComposite&);
+    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
+                           double probability) const;
 
 private:
     virtual void addObject(Objects&, MEPObject&, std::vector<int>&);
@@ -22,7 +24,6 @@ private:
     MEPObjectPtr cloneObject() const;
     void cloneCompositeObject(const MEPComposite& rhs,
                               int objectNumber);
-    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&) const;
 };
 
 void dynamicCast(MEPObjects &objects, MEPChromosomes &chromosomes);

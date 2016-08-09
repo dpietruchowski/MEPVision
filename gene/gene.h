@@ -22,10 +22,9 @@ private:
     int assessGene(MEPFitness&) const;
 private:
     virtual MEPObjectPtr cloneGene() const = 0;
+    virtual void saveGene(std::string&) const = 0;
     virtual void writeGene(std::string&) const = 0;
     virtual void runGene(const std::vector<cv::Mat>&, cv::Mat&) const = 0;
-
-    virtual MEPObjectPtr mutate() const = 0;
     
 private:
 	cv::Mat result_;

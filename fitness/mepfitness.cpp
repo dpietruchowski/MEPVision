@@ -18,9 +18,15 @@ MEPFitness::MEPFitness(string referenceImageName)
     referenceImage_ = cv::imread(referenceImageName);
 }
 
+MEPFitness::MEPFitness(const cv::Mat &referenceImage):
+    referenceImage_(referenceImage)
+{
+
+}
+
 int MEPFitness::measure(const cv::Mat &image) const
 {
-    int measure = 10000;//?
+    int measure = 100000;//?
     cv::Mat C, D;
     cv::threshold(image, C, 125, 255, 0);
     threshold(referenceImage_, D, 125, 255, 0);

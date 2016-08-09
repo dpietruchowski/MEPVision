@@ -32,7 +32,9 @@ inline MEPSHARED_EXPORT const char* enumToString(name v)                        
     }                                                                     \
 }
 
-DEFINE_ENUM(MEPType,(MEPGENE)(MEPCHROMOSOME)(MEPPOPULATION)(MEPUNIDENTIFY))
+DEFINE_ENUM(MEPType,(MEPFUNCTIONGENE)(MEPTERMINALGENE)                    \
+            (MEPMORPHOGENE)(MEPTHRESHGENE)                                \
+            (MEPCHROMOSOME)(MEPPOPULATION)(MEPUNIDENTIFY))
 DEFINE_ENUM(MEPState,(MEPCREATED)(MEPDONE)(MEPCLEARED)(MEPASSESSED)       \
             (MEPCLEAREDSORTED)(MEPCOMPLITED)(MEPUNDEFINED))
 
@@ -44,6 +46,21 @@ std::string to_string_with_precision(const T a_value, const int n = 6)
     return out.str();
 }
 
+
+
+inline MEPType enumFromString(const std::string& enm)
+{
+    if(enm == "MEPFUNCTIONGENE") return MEPFUNCTIONGENE;
+    if(enm == "MEPTERMINALGENE") return MEPTERMINALGENE;                    \
+    if(enm == "MEPMORPHOGENE") return MEPMORPHOGENE;
+    if(enm == "MEPTHRESHGENE") return MEPTHRESHGENE;                                \
+    if(enm == "MEPCHROMOSOME") return MEPCHROMOSOME;
+    if(enm == "MEPPOPULATION") return MEPPOPULATION;
+    if(enm == "MEPUNIDENTIFY") return MEPUNIDENTIFY;
+
+    throw std::string("Wrong enum");
+}
+
 struct MEPSHARED_EXPORT MEPId
 {
     MEPType type;
@@ -51,8 +68,10 @@ struct MEPSHARED_EXPORT MEPId
     unsigned int cloneNumber;
     MEPId();
     MEPId(MEPType, unsigned int, unsigned int);
+    void swap(MEPId& rhs);
     bool operator ==(const MEPId&) const;
     std::string toString() const;
+    void fromString(const std::string&);
 };
 
 //TODO Change name of variable score.

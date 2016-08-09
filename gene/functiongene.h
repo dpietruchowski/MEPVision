@@ -18,12 +18,13 @@ private:
 private:
     //Inherate from MEPGene
     MEPObjectPtr cloneGene() const;
+    void saveGene(std::string&) const;
     void writeGene(std::string&) const;
     int getGeneNArguments() const;
     void runGene(const std::vector<cv::Mat>&, cv::Mat&) const;
-    MEPObjectPtr mutate() const;
-private:
+public:
     FunctionGene(std::pair<FunctionId, FunctionPtr> p, MEPId id);
+private:
     FunctionGene(std::pair<FunctionId, FunctionPtr> p);
     FunctionGene(const FunctionGene& functionGene);
 private:

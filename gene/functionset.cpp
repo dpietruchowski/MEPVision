@@ -1,5 +1,4 @@
 #include "functionset.h"
-#include "functions.h"
 #include <opencv2/highgui/highgui.hpp>
 
 using namespace std;
@@ -38,35 +37,12 @@ FunctionSet::FunctionSet()
     functionsNotAdded_.insert(p);
     f = make_pair(1, FunctionSet::thresHold);
     p = make_pair("threshold", f);
-    functionsNotAdded_.insert(p);
+//    functionsNotAdded_.insert(p);               <-----------------nie dodana
 
-    f = make_pair(1, FunctionSet::dilaTe);
-    p = make_pair("dilate", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::eroDe);
-    p = make_pair("erode", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::open);
-    p = make_pair("open", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::close);
-    p = make_pair("close", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::morphGradient);
-    p = make_pair("morphGradient", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::topHat);
-    p = make_pair("topHat", f);
-    functionsNotAdded_.insert(p);
-    f = make_pair(1, FunctionSet::blackHat);
-    p = make_pair("blackHat", f);
-    functionsNotAdded_.insert(p);
     f = make_pair(1, FunctionSet::hitMiss);
     p = make_pair("hitMiss", f);
     functionsNotAdded_.insert(p);      //        <-----------------nie dodana
 
-    addFunction("dilate");
-    addFunction("erode");
     addAllFunctions();
 }
 
@@ -182,90 +158,6 @@ int FunctionSet::thresHold(const vector<Mat>& src, Mat& dst)
     }
     const Mat& src1 = src[0];
     threshold(src1, dst, 100, 255, 0);
-    return 1;
-}
-
-int FunctionSet::dilaTe(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    dilate(src1, dst, element_);
-    return 1;
-}
-
-int FunctionSet::eroDe(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    erode(src1, dst, element_);
-    return 1;
-}
-
-int FunctionSet::open(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    morphologyEx(src1, dst, MORPH_OPEN, element_);
-    return 1;
-}
-
-int FunctionSet::close(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    morphologyEx(src1, dst, MORPH_CLOSE, element_);
-    return 1;
-}
-
-int FunctionSet::morphGradient(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    morphologyEx(src1, dst, MORPH_GRADIENT, element_);
-    return 1;
-}
-
-int FunctionSet::topHat(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    morphologyEx(src1, dst, MORPH_TOPHAT, element_);
-    return 1;
-}
-
-int FunctionSet::blackHat(const std::vector<Mat> &src, Mat &dst)
-{
-    if (src.size() != 1)
-    {
-        string exception = "Zla liczba argumentow";
-        throw exception;
-    }
-    const Mat& src1 = src[0];
-    morphologyEx(src1, dst, MORPH_BLACKHAT, element_);
     return 1;
 }
 

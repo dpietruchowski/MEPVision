@@ -15,27 +15,28 @@ private:
 class UniformCrossover : public MEPCrossover
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int);
     UniformCrossover(): MEPCrossover(new UniformPoints()) {}
 };
 
 class BetterGeneCrossover : public MEPCrossover
 {
 public:
+    static MEPOperation* create(int);
     BetterGeneCrossover(): MEPCrossover(new BetterGenePoints()) {}
 };
 
 class OnePointCrossover : public MEPCrossover
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int);
     OnePointCrossover(): MEPCrossover(new RandomPoints(2)) {}
 };
 
 class TwoPointCrossover : public MEPCrossover
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int);
     TwoPointCrossover(): MEPCrossover(new RandomPoints(1)) {}
 };
 

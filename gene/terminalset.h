@@ -17,12 +17,10 @@ public:
     TerminalSet();
     MatPtr getRandomImage() const;
     MatPtr getInputImage() const;
-    void setInputImage(MatPtr inputImage);  
-    void setInputImage(std::string inputImage);
+    void setInputImage(MatPtr inputImage);
 
 private:
     static MatPtr inputImage_;
-    static MatPtr terminal;
 };
 
 #endif // TERMINALSET_H

@@ -1,6 +1,6 @@
 #include "terminalgene.h"
 
-#include "meptypes.h"
+#include "../core/meptypes.h"
 #include "opencv2/imgproc/imgproc.hpp"
 #include <memory>
 
@@ -34,7 +34,7 @@ TerminalGene::TerminalGene(const TerminalGene &terminalGene):
 
 MEPObjectPtr TerminalGene::create(unsigned int geneNumber)
 {
-    MEPId id = {MEPType::MEPGENE, geneNumber, 0};
+    MEPId id = {MEPType::MEPTERMINALGENE, geneNumber, 0};
     return MEPObjectPtr(new TerminalGene(terminals_.getRandomImage(), id));
 }
 
@@ -46,6 +46,13 @@ void TerminalGene::setTerminal(MatPtr newTerminal)
 MEPObjectPtr TerminalGene::cloneGene() const
 {
     return MEPObjectPtr( new TerminalGene(*this) );
+}
+
+void TerminalGene::saveGene(string &gene) const
+{
+    gene += "#";
+    gene += terminalName_;
+    gene += "#";
 }
 
 void TerminalGene::writeGene(std::string& gene) const
@@ -61,12 +68,4 @@ int TerminalGene::getGeneNArguments() const
 void TerminalGene::runGene(const std::vector<cv::Mat>&, cv::Mat& dst) const
 {
     terminal_->copyTo(dst);
-}
-
-
-MEPObjectPtr TerminalGene::mutate() const
-{
-	MEPObjectPtr mutated = cloneGene();
-    std::static_pointer_cast<TerminalGene> (mutated)->setTerminal(terminals_.getRandomImage());
-	return mutated;
 }

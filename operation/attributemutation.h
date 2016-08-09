@@ -14,7 +14,7 @@ private:
 class RandAttributeMutation: public AttributeMutation
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int nMutatedPoints);
     RandAttributeMutation(int nMutatedPoints):
         AttributeMutation(new RandomPoints(nMutatedPoints)) {}
 };
@@ -22,6 +22,7 @@ public:
 class WorstAttributeMutation: public AttributeMutation
 {
 public:
+    static MEPOperation* create(int nMutatedPoints);
     WorstAttributeMutation(int nMutatedPoints):
         AttributeMutation(new WorstPoints(nMutatedPoints)) {}
 };
@@ -29,6 +30,7 @@ public:
 class UniformAttributeMutation: public AttributeMutation
 {
 public:
+    static MEPOperation* create(int);
     UniformAttributeMutation():
         AttributeMutation(new UniformPoints()) {}
 };

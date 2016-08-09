@@ -1,6 +1,7 @@
 #include "mepcomposite.h"
 
 #include <string>
+#include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
 #include "../selection/rouletteselection.h"
 #include "../selection/tournamentselection.h"
@@ -11,19 +12,17 @@ using namespace std;
 MEPComposite::MEPComposite(const MEPId& id, int size):
     MEPObject(id), size_(size)
 {
-    for(int i = 0; i < size; i++)
-        scores.push_back({0,0, 0.0});
 }
 
 MEPComposite::MEPComposite(const MEPComposite& rhs):
-    MEPObject(rhs)
+    MEPObject(rhs), size_(rhs.size_)
 {
-    clonePart(rhs, 0, rhs.objects_.size() - 1);
 }
 
 void MEPComposite::swap(MEPComposite& rhs)
 {
     MEPObject::swap(rhs);
+    std::swap(size_, rhs.size_);
     objects_.swap(rhs.objects_);
 }
 
@@ -54,8 +53,7 @@ const MEPObject &MEPComposite::select(MEPSelectionType type) const
     }
 
     selection->calcScores();
-    const_cast<Scores&> (scores) = selection->getScores();
-    const MEPObject& selected = find(selection->getSelectedRank());
+    const MEPObject& selected = findByRank(selection->getSelectedRank());
 
     delete selection;
     return selected;
@@ -94,10 +92,20 @@ void MEPComposite::sort()
     }
 }
 
-const MEPObject& MEPComposite::find(const int rank) const
+void MEPComposite::saveObject(string &object) const
+{
+    object += "\n";
+    for(const auto& obj: objects_)
+    {
+        object += obj->save();
+        object += "\n";
+    }
+}
+
+const MEPObject& MEPComposite::findByRank(const int rank) const
 {
     if(!isValid())
-        throw std::string("MEPComposite::find: Object is invalid");
+        throw std::string("MEPComposite::findByRank: Object is invalid");
     
     vector<MEPObjectPtr>::const_iterator it;
     it = std::find_if(objects_.begin(), objects_.end(),
@@ -109,11 +117,8 @@ const MEPObject& MEPComposite::find(const int rank) const
     return **it;
 }
 
-const MEPObject& MEPComposite::find(const MEPId& id) const
+const MEPObject& MEPComposite::findById(const MEPId& id) const
 {
-    if(!isValid())
-        throw std::string("MEPComposite::find: Object is invalid");
-    
     vector<MEPObjectPtr>::const_iterator it;
     it = std::find_if(objects_.begin(), objects_.end(),
                       [&](const MEPObjectPtr& obj)
@@ -126,19 +131,16 @@ const MEPObject& MEPComposite::find(const MEPId& id) const
 
 int MEPComposite::findNumber(const MEPId& id) const
 {
-    return find(find(id));
+    return find(findById(id));
 }
 
-const MEPObject& MEPComposite::getObject(int number) const
+const MEPObject& MEPComposite::findByOrder(int number) const
 {
     return *objects_[number];
 }
 
 int MEPComposite::find(const MEPObject& object) const
 {
-    if(!isValid())
-        throw std::string("MEPComposite::find: Object is invalid");
-    
     for(int i = 0; i < getSize(); i++)
     {
         if(*objects_[i] == object)
@@ -191,17 +193,18 @@ void MEPComposite::writeObject(std::string& object) const
 {
     if(!isValid())
         throw std::string("MEPComposite::writeObject: Object is invalid");
-    
+    object += " ";
+    object += std::to_string(normalized_);
     object += "\n";
-    int i = 0;
+    int i = 0;/*
     for(const auto& obj: objects_)
     {
         object += scores[i].toString();
         object += "   ";
-        object += obj->write();
+        object += obj->writeObject();
         object += "\n";
         ++i;
-    }
+    }*/
 }
 
 void MEPComposite::writeObjectTree(std::string& object) const
@@ -257,10 +260,13 @@ int MEPComposite::runObject(MEPFitness& fitness)
         sum+= obj->getScore();
         i++;
     }
-    sum=sum/i;
-    if(getId().type == MEPPOPULATION)
-        std::cout << "///////// Srednia ocena osobnika:" << sum << "/////////" << std::endl << std::endl;
-    return find(0).getScore();
+    normalized_=sum/i;
+    if(getId().type == MEPPOPULATION) {
+        std::cout << "///////// Srednia ocena osobnika:" << normalized_ << "/////////"
+                  << std::endl;
+        std::cout << "///////// Ocena najlepszego osobnika:" << findByRank(0).getScore()
+              << "/////////" << std::endl << std::endl; }
+    return findByRank(0).getScore();
 }
 
 void MEPComposite::clearObjectResults()

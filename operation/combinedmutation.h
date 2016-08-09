@@ -14,7 +14,7 @@ private:
 class RandCombinedMutation: public CombinedMutation
 {
 public:
-    static MEPOperation* create();
+    static MEPOperation* create(int nMutatedPoints);
     RandCombinedMutation(int nMutatedPoints):
         CombinedMutation(new RandomPoints(nMutatedPoints)) {}
 };
@@ -22,6 +22,7 @@ public:
 class WorstCombinedMutation: public CombinedMutation
 {
 public:
+    static MEPOperation* create(int nMutatedPoints);
     WorstCombinedMutation(int nMutatedPoints):
         CombinedMutation(new WorstPoints(nMutatedPoints)) {}
 };
@@ -29,6 +30,7 @@ public:
 class UniformCombinedMutation: public CombinedMutation
 {
 public:
+    static MEPOperation* create(int);
     UniformCombinedMutation():
         CombinedMutation(new UniformPoints()) {}
 };

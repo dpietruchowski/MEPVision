@@ -76,6 +76,7 @@ void MEPGene::writeObjectTree(std::string &object) const
     {
         object += spaces;
         object += child.get().write();
+        object += "\n";
     }
 }
 
@@ -120,6 +121,19 @@ void MEPGene::runObjectTree()
     runGene(children_);
 }
 
+void MEPGene::saveObject(string &object) const
+{
+    object += "#";
+    object += std::to_string(size_);
+    saveGene(object);
+    for(const auto& child: children_)
+    {
+        object += "!";
+        object += child.get().getId().toString();
+    }
+    object += "!";
+}
+
 void MEPGene::runGeneTree()
 {
     runObjectTree();
@@ -158,9 +172,6 @@ int MEPGene::getNArguments() const
 
 MEPObjectPtr MEPGene::cloneObject() const
 {
-    if(isValid() == false)
-        throw std::string("MEPGene::cloneObject: Object is invalid");
-
     return cloneGene();
 }
 

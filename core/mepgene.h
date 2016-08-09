@@ -30,6 +30,7 @@ private:
     void runObjectTree();
     //TODO Wymyslec lepsza nazwe
 
+    void saveObject(std::string&) const;
     void writeObject(std::string&) const;
     void writeObjectTree(std::string&) const;
     void showObject(const std::string& id);
@@ -43,6 +44,7 @@ private:
 
 private:
     //TerminalGene and FunctionGene must implement this functions
+    virtual void saveGene(std::string&) const = 0;
     virtual void writeGene(std::string&) const = 0;
     virtual void showGene(const std::string& windowName) const = 0;
     virtual void clearGeneResult() = 0;
@@ -50,8 +52,6 @@ private:
 
     virtual int assessGene(MEPFitness&) const = 0;
     virtual void runGene(const MEPGenes&) = 0;
-
-    virtual MEPObjectPtr mutate() const = 0;
 
 private:
     MEPGenes children_;

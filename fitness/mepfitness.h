@@ -11,6 +11,7 @@ class MEPSHARED_EXPORT MEPFitness
 {
 public:
     MEPFitness(std::string referenceImageName);
+    MEPFitness(const cv::Mat& referenceImage);
     virtual ~MEPFitness() {}
 public:
     int measure(const cv::Mat& image) const;

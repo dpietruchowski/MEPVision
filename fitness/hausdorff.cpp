@@ -6,9 +6,9 @@
 using namespace cv;
 using namespace std;
 
-MEPFitness *Hausdorff::create()
+MEPFitness *Hausdorff::create(const cv::Mat& referenceImage)
 {
-    return new Hausdorff("kangur_ref.png");
+    return new Hausdorff(referenceImage);
 }
 
 Hausdorff::Hausdorff(string referenceImageName):
@@ -16,16 +16,20 @@ Hausdorff::Hausdorff(string referenceImageName):
 {
 }
 
+Hausdorff::Hausdorff(const Mat &referenceImage):
+    MEPFitness(referenceImage)
+{
+
+}
+
 int Hausdorff::fitness(Mat &A, Mat &B) const
 {
     vector<Point> a, b;
 
     this->transformImages(A, B);
-    cv::Canny(A, A, 20, 20*30);
     if(countNonZero(A) == 0)
         return 100000;
     findNonZero(A, a);
-    Canny(B, B, 20, 20*30);
     findNonZero(B, b);
 
     return this->maxDistance(a, b);
@@ -78,8 +82,6 @@ int Hausdorff::maxDistance(const vector<Point> &a,
     int maxDistAB = distance(a, b);
     int maxDistBA = distance(b, a);
     int maxDist = max(maxDistAB, maxDistBA);
-
-//    std::cout << endl;
 
     return maxDist;
 }

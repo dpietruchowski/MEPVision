@@ -20,7 +20,17 @@ void CombinedMutation::addMutated(const MEPChromosome &,
     child.MEPComposite::addObject(mutated, args);
 }
 
-MEPOperation *RandCombinedMutation::create()
+MEPOperation *RandCombinedMutation::create(int nMutatedPoints)
 {
-    return new RandCombinedMutation(1 + rand() % 10);
+    return new RandCombinedMutation(nMutatedPoints);
+}
+
+MEPOperation *WorstCombinedMutation::create(int nMutatedPoints)
+{
+    return new WorstCombinedMutation(nMutatedPoints);
+}
+
+MEPOperation *UniformCombinedMutation::create(int)
+{
+    return new UniformCombinedMutation();
 }

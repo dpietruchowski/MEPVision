@@ -3,134 +3,83 @@
 #include <cstdio>
 #include <ctime>
 #include <algorithm>
-
-#include "core/mepchromosome.h"
-#include "core/meppopulation.h"
-#include "generator/mepgenerator.h"
-#include "gene/functiongene.h"
-#include "gene/terminalgene.h"
-#include "gene/morphogene.h"
-#include "opencv2/highgui/highgui.hpp"
-#include "fitness/hausdorff.h"
-#include "fitness/hausdorffsmall.h"
-#include "fitness/hausdorffcanny.h"
-#include "fitness/hamming.h"
-#include "fitness/mepfitnessgenerator.h"
-#include "operation/mepoperationtypes.h"
-#include "selection/rouletteselection.h"
-#include "selection/tournamentselection.h"
-#include "operation/operation.h"
-#include "operation/mepoperationgenerator.h"
+#include <fstream>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs/imgcodecs.hpp>
+#include "core/mepcore.h"
+#include "parser/mepparser.h"
+#include "mepalgorithm.h"
 
 using namespace std;
 
-static MEPObjectPtr createCh(unsigned int number)
+static void parse()
 {
-    MEPObjectPtr chromosome(new MEPChromosome({MEPCHROMOSOME, number, 0}, 100));
-    return chromosome;
+    MEPParser parser("Best.txt");
+    parser.parse();
+
+    MEPObjectPtr chromosome = parser.getChromosome();
+    cv::Mat refImg = cv::imread("auto_ref.png", 0);
+    MEPFitness *fitness = Hamming::create(refImg);
+
+    //chromosome->run(*fitness);
+
+    ThreshParameters param(105,0);
+    ThreshGene gene(ThreshGene::thresholdOperation, param, {MEPTHRESHGENE, 0, 0});
+
+    MEPChromosome ch({MEPCHROMOSOME, 0, 0}, 31);
+    ch.clonePart(dynamic_cast<MEPComposite&>(*chromosome),0,29);
+    vector<int> args;
+    args.push_back(28);
+    dynamic_cast<MEPComposite&>(ch).addObject(gene.clone(), args);
+
+    Gene& bestGene = const_cast<Gene&> (dynamic_cast<const Gene&>
+                                            (dynamic_cast<MEPComposite&>(
+                                                 ch).findByOrder(30)));
+    bestGene.runGeneTree();
+    std::string name = "UDALO SIE";
+    name += ".png";
+    cv::imwrite(name, bestGene.getResult());
+
+    delete fitness;
 }
 
-static MEPObjectPtr createP(unsigned int number)
+static void algorithm()
 {
-    MEPObjectPtr population(new MEPPopulation({MEPPOPULATION, number, 0}, 100));
-    return population;
-}
+    MEPAlgorithm mep;
+    mep.selectionType = RANK_ROULETTESELECTION;
+    mep.setChromosomeSize(20);
+    mep.setPopulationSize(100);
+    mep.nIterations = 200;
+////////////////////////////////////////////
+    mep.setInputImage("auto2.png");
+    mep.setReferenceImage("auto2_ref.png");
+////////////////////////////////////////////
+    mep.registerGene(0.1, TERMINALGENE);
+    mep.registerGene(0.2, FUNCTIONGENE);
 
-static void createGenerator(MEPGenerator& generator)
-{
-   generator.registerGene(0.3, FunctionGene::create);
-   generator.registerGene(0.1, TerminalGene::create);
-   generator.registerGene(0.6, MorphoGene::create);
-   generator.registerChromosome(createCh);
-   generator.registerPopulation(createP);
-}
+    double sumPro = mep.registerGene(0.5, MORPHOGENE);
+    mep.registerGene(1 - sumPro, THRESHGENE);
+///////////////////////////////////////////
+    mep.registerFitness(0.85, HAMMING);
 
-using namespace cv;
+    sumPro = mep.registerFitness(0.1, HAUSDORFF_CANNY);
+    mep.registerFitness(1 - sumPro, HAUSDORFF_SMALL);
+///////////////////////////////////////////
+    mep.registerOperation(0.15, UNIFORM_ARGUMENTMUTATION);
+    mep.registerOperation(0.15, UNIFORM_ATTRIBUTEMUTATION);
+
+    sumPro = mep.registerOperation(0.2, UNIFORM_COMBINEDMUTATION);
+    mep.registerOperation(1 - sumPro, UNIFORM_CROSSOVER);
+//////////////////////////////////////////
+
+    mep.run();
+}
 
 int main()
 {
     srand(time(NULL));
-
-    MEPObjectPtr population(new MEPPopulation({MEPPOPULATION, 0, 0}, 100));
-    MEPObjectPtr reproducedPopulation;
-
-    MEPGenerator generator;
-    createGenerator(generator);
-    MEPOperationGenerator opGenerator;
-    MEPFitnessGenerator fitGenerator;
-
-    opGenerator.registerObject(0.05, RandArgumentMutation::create);
-    opGenerator.registerObject(0.05, RandAttributeMutation::create);
-    opGenerator.registerObject(0.3, RandCombinedMutation::create);
-    opGenerator.registerObject(0.2, UniformCrossover::create);
-    opGenerator.registerObject(0.2, OnePointCrossover::create);
-    opGenerator.registerObject(0.2, TwoPointCrossover::create);
-
-    fitGenerator.registerObject(0.95, Hamming::create);
-    fitGenerator.registerObject(0.02, HausdorffCanny::create);
-    fitGenerator.registerObject(0.02, HausdorffSmall::create);
-    fitGenerator.registerObject(0.01, Hausdorff::create);
-
-    dynamic_cast<MEPComposite&> (*population).init(generator);
-    try {
-    for(int i = 0; i < 1000; i++)
-    {
-        MEPFitness *fitness = fitGenerator.createRandomPtr();
-        MEPOperation *operation = opGenerator.createRandomPtr();
-
-        cout << "Iteracja nr " << i << " " << flush;
-        population->run(*fitness);
-
-        const MEPComposite& pop = dynamic_cast<MEPComposite&> (*population);
-        const MEPChromosome& bestChromosome = dynamic_cast<const MEPChromosome&>
-                                                (pop.find(0));
-
-        Gene& bestGene = const_cast<Gene&> (dynamic_cast<const Gene&>
-                                                (bestChromosome.find(0)));
-        bestGene.runGeneTree();
-        std::string name = "Best ";
-        name += std::to_string(i);
-        name += ".png";
-        cv::imwrite(name, bestGene.getResult());
-        bestGene.clearResult();
-
-        const_cast<MEPChromosome&> (bestChromosome).clearResults();
-
-        reproducedPopulation = dynamic_cast<MEPPopulation&> (*population).
-                            reproduce(RANK_ROULETTESELECTION,
-                                      generator, *operation);
-        population.swap(reproducedPopulation);
-        cout << endl;
-        delete operation;
-        delete fitness;
-    }
-    } catch(std::string &exc)
-    {
-        cout << endl;
-        cout << "////////////////////////////////" << endl;
-        cout << exc << endl;
-        cout << "////////////////////////////////" << endl;
-    }
+//    parse();
+    algorithm();
 
     return 0;
 }
-
-//int main()
-//{
-//    srand(0);
-//    MEPGenerator generator;
-//    createGenerator(generator);
-//    MEPFitness *fitness = Hamming::create();
-
-//    MEPObjectPtr chromosome = generator.createChromosome();
-
-//    chromosome->init(generator);
-
-//    cout << chromosome->write() << endl;
-
-//    chromosome->show();
-
-//    cout << chromosome->write() << endl;
-
-//    return 0;
-//}

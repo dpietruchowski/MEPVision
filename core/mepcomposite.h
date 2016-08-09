@@ -23,9 +23,9 @@ public:
     std::vector<bool> isObjectsClone(const MEPComposite&);
     std::vector<bool> compare(const MEPComposite &rhs, int size) const;
 
-    const MEPObject& getObject(int number) const;
-    const MEPObject& find(const int rank) const;
-    const MEPObject& find(const MEPId&) const;
+    const MEPObject& findByOrder(int number) const;
+    const MEPObject& findByRank(const int rank) const;
+    const MEPObject& findById(const MEPId&) const;
 
     int findNumber(const MEPId&) const;
     int find(const MEPObject&) const;
@@ -34,7 +34,8 @@ public:
     void addObject(MEPObjectPtr object,
                    std::vector<int> args = std::vector<int>());
 
-    virtual MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&) const = 0;
+    virtual MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
+                                   double probability) const = 0;
     void reproduceCompositeObject(const MEPComposite& rhs, MEPSelectionType);
     const MEPObject& select(MEPSelectionType) const;
 
@@ -43,6 +44,7 @@ protected:
 private:
     void sort();
     //Dziedziczace po MEPObject
+    void saveObject(std::string&) const;
     void writeObject(std::string&) const;
     void writeObjectTree(std::string&) const;
     void showObject(const std::string& id);
@@ -60,7 +62,7 @@ private:
 private:
     Objects objects_;
     int size_;
-    Scores scores;
+    double normalized_;
 };
 
 #endif // MEPCOMPOSITE_H

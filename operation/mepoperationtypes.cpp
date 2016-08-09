@@ -91,11 +91,11 @@ int WorstPoints::calcPoint(const MEPChromosomes& parents, int &pointNumber) cons
     if(parents[0].get().getState() < MEPASSESSED)
         throw std::string("WorstPoints::calcPoint:: wrong object state");
 
-    int calced = parents[0].get().find(parents[0].get().find(pointNumber));
+    int calced = parents[0].get().find(parents[0].get().findByRank(pointNumber));
     pointNumber--;
     while(calced < 2)
     {
-        calced = parents[0].get().find(parents[0].get().find(pointNumber));
+        calced = parents[0].get().find(parents[0].get().findByRank(pointNumber));
         pointNumber--;
     }
 

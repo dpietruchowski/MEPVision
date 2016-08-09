@@ -1,5 +1,7 @@
 #include "meptypes.h"
 
+#include <utility>
+
 using namespace std;
 
 MEPId::MEPId()
@@ -12,6 +14,13 @@ MEPId::MEPId()
 MEPId::MEPId(MEPType type, unsigned int number, unsigned int cloneNumber):
     type(type), number(number), cloneNumber(cloneNumber)
 {
+}
+
+void MEPId::swap(MEPId &rhs)
+{
+    std::swap(type, rhs.type);
+    std::swap(number, rhs.number);
+    std::swap(cloneNumber, rhs.cloneNumber);
 }
 
 bool MEPId::operator ==(const MEPId& rhs) const
@@ -30,6 +39,20 @@ string MEPId::toString() const
     id += to_string(cloneNumber);
 
     return id;
+}
+
+
+// Format: "MEPMORPHOGENE 6516 20"
+void MEPId::fromString(const string &id)
+{
+    size_t firstSpace = id.find_first_of(" ");
+    size_t secondSpace = id.find_last_of(" ");
+    string stype = id.substr(0, firstSpace);
+    type = enumFromString(stype);
+    string snumber = id.substr(firstSpace+1, secondSpace - firstSpace);
+    number = stoi(snumber);
+    string sclone = id.substr(secondSpace+1);
+    cloneNumber = stoi(sclone);
 }
 
 //MEPScore::MEPScore()

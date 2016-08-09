@@ -43,13 +43,6 @@ public:
     static int bitwiseNot(const std::vector<cv::Mat>& src, cv::Mat& dst);
     static int thresHold(const std::vector<cv::Mat>& src, cv::Mat& dst);
 
-    static int dilaTe(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int eroDe(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int open(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int close(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int morphGradient(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int topHat(const std::vector<cv::Mat>& src, cv::Mat& dst);
-    static int blackHat(const std::vector<cv::Mat>& src, cv::Mat& dst);
     static int hitMiss(const std::vector<cv::Mat>& src, cv::Mat& dst);
 
 private:

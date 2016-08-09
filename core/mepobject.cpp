@@ -24,7 +24,7 @@ MEPObject::MEPObject(const MEPObject& rhs):
 
 void MEPObject::swap(MEPObject& rhs)
 {
-    std::swap(id_, rhs.id_);
+    id_.swap(rhs.id_);
     std::swap(score_, rhs.score_);
     std::swap(rank_, rhs.rank_);
 }
@@ -52,6 +52,15 @@ bool MEPObject::operator ==(const int& rank) const
 bool MEPObject::operator ==(const MEPId& id) const
 {
     return id_ == id;
+}
+
+string MEPObject::save() const
+{
+    string object = "#";
+    object += id_.toString();
+    saveObject(object);
+
+    return object;
 }
 
 void MEPObject::show()
@@ -128,7 +137,6 @@ void MEPObject::run(MEPFitness& fitness)
 {
     score_ = runObject(fitness);
     clearResult();
-    int a = 0;
 }
 
 MEPObjectPtr MEPObject::clone() const

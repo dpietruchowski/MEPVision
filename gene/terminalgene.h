@@ -19,12 +19,13 @@ private:
 private:
     //Inherate from MEPGene
     MEPObjectPtr cloneGene() const;
+    void saveGene(std::string&) const;
     void writeGene(std::string&) const;
     int getGeneNArguments() const;
     void runGene(const std::vector<cv::Mat>&, cv::Mat&) const;
-    MEPObjectPtr mutate() const;
-private:
+public:
     TerminalGene(MatPtr image, MEPId id);
+private:
     TerminalGene(MatPtr image);
     TerminalGene(const TerminalGene& terminalGene);
 private:

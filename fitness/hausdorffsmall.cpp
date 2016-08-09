@@ -4,9 +4,9 @@
 using namespace std;
 using namespace cv;
 
-MEPFitness *HausdorffSmall::create()
+MEPFitness *HausdorffSmall::create(const cv::Mat& referenceImage)
 {
-    return new HausdorffSmall("kangur_ref.png");
+    return new HausdorffSmall(referenceImage);
 }
 
 HausdorffSmall::HausdorffSmall(string referenceImageName):
@@ -22,7 +22,14 @@ HausdorffSmall::HausdorffSmall(string referenceImageName,
 {
 }
 
-void HausdorffSmall::transformImages(Mat &A, Mat &B)
+HausdorffSmall::HausdorffSmall(const Mat &referenceImage):
+    Hausdorff(referenceImage),
+    width_(220), height_(100)
+{
+
+}
+
+void HausdorffSmall::transformImages(Mat &A, Mat &B) const
 {
     resize(A, A, Size(width_,height_));
     resize(B, B, Size(width_,height_));

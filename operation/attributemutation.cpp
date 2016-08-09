@@ -12,7 +12,7 @@ void AttributeMutation::addMutated(const MEPChromosome &parent,
 {
     MEPObjectPtr mutated = generator.createGene();
     const MEPGene& cloned = dynamic_cast<const MEPGene&>
-                                    (parent.getObject(child.getSize()));
+                                    (parent.findByOrder(child.getSize()));
 
     std::vector<int> args;
 
@@ -25,7 +25,7 @@ void AttributeMutation::addMutated(const MEPChromosome &parent,
 
     for(int i = 0; i < lowerNArguments; ++i)
     {
-        const MEPObject& clonedChild = parent.find(cloned.getChildId(i));
+        const MEPObject& clonedChild = parent.findById(cloned.getChildId(i));
         int clonedChildNumber = parent.find(clonedChild);
         args.push_back(clonedChildNumber);
     }
@@ -39,7 +39,17 @@ void AttributeMutation::addMutated(const MEPChromosome &parent,
     child.MEPComposite::addObject(mutated, args);
 }
 
-MEPOperation *RandAttributeMutation::create()
+MEPOperation *RandAttributeMutation::create(int nMutatedPoints)
 {
-    return new RandAttributeMutation(1 + rand() % 10);
+    return new RandAttributeMutation(nMutatedPoints);
+}
+
+MEPOperation *UniformAttributeMutation::create(int)
+{
+    return new UniformAttributeMutation();
+}
+
+MEPOperation *WorstAttributeMutation::create(int nMutatedPoints)
+{
+    return new WorstAttributeMutation(nMutatedPoints);
 }

@@ -10,7 +10,7 @@ void ArgumentMutation::addMutated(const MEPChromosome &parent,
                                   MEPGenerator &,
                                   MEPChromosome &child) const
 {
-    MEPObjectPtr mutated = parent.getObject(child.getSize()).clone();
+    MEPObjectPtr mutated = parent.findByOrder(child.getSize()).clone();
 
     std::vector<int> args;
     for(int i = 0; i < dynamic_cast<MEPGene&> (*mutated).getNArguments(); ++i)
@@ -21,7 +21,17 @@ void ArgumentMutation::addMutated(const MEPChromosome &parent,
     child.MEPComposite::addObject(mutated, args);
 }
 
-MEPOperation *RandArgumentMutation::create()
+MEPOperation *RandArgumentMutation::create(int nMutatedPoints)
 {
-    return new RandArgumentMutation(1 + rand() % 10);
+    return new RandArgumentMutation(nMutatedPoints);
+}
+
+MEPOperation *UniformArgumentMutation::create(int)
+{
+    return new UniformArgumentMutation();
+}
+
+MEPOperation *WorstArgumentMutation::create(int nMutatedPoints)
+{
+    return new WorstArgumentMutation(nMutatedPoints);
 }

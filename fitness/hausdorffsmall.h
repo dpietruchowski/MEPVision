@@ -6,12 +6,13 @@
 class MEPSHARED_EXPORT HausdorffSmall: public Hausdorff
 {
 public:
-    static MEPFitness* create();
+    static MEPFitness* create(const cv::Mat& referenceImage);
     HausdorffSmall(std::string referenceImageName);
     HausdorffSmall(std::string referenceImageName,
                   int width, int height);
+    HausdorffSmall(const cv::Mat& referenceImage);
 private:
-    virtual void transformImages(cv::Mat& A, cv::Mat& B);
+    virtual void transformImages(cv::Mat& A, cv::Mat& B) const;
 private:
     int width_;
     int height_;

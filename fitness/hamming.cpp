@@ -4,14 +4,20 @@
 
 using namespace std;
 
-MEPFitness *Hamming::create()
+MEPFitness *Hamming::create(const cv::Mat &referenceImage)
 {
-    return new Hamming("kangur_ref.png");
+    return new Hamming(referenceImage);
 }
 
 Hamming::Hamming(string referenceImageName):
     MEPFitness(referenceImageName)
 {
+}
+
+Hamming::Hamming(const cv::Mat &referenceImage):
+    MEPFitness(referenceImage)
+{
+
 }
 
 int Hamming::fitness(cv::Mat &A, cv::Mat &B) const

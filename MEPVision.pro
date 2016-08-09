@@ -9,13 +9,13 @@ CONFIG += c++11
 
 QMAKE_CXXFLAGS += -std=c++11
 
-LIBS += -L"/usr/lib/x86_64-linux-gnu" -lboost_system -lopencv_imgproc
-LIBS += -lopencv_highgui -lopencv_core
+LIBS += -lopencv_highgui -lopencv_core -lopencv_imgcodecs -lopencv_imgproc
+LIBS += -L"/usr/lib/x86_64-linux-gnu" -lboost_system
 
 DEFINES += MEP_LIBRARY
 
 SOURCES += main.cpp \
-    meptypes.cpp \
+    core/meptypes.cpp \
     core/mepobject.cpp \
     core/mepcomposite.cpp \
     core/mepgene.cpp \
@@ -46,11 +46,15 @@ SOURCES += main.cpp \
     operation/combinedmutation.cpp \
     operation/mepoperationgenerator.cpp \
     fitness/mepfitnessgenerator.cpp \
-    gene/morphogene.cpp
+    gene/morphogene.cpp \
+    gene/threshgene.cpp \
+    parser/mepparser.cpp \
+    mepalgorithm.cpp \
+    #fitness/hausdorffextractor.cpp
 
 HEADERS += \
     mep_global.h \
-    meptypes.h \
+    core/meptypes.h \
     core/mepobject.h \
     core/mepcomposite.h \
     core/mepgene.h \
@@ -84,7 +88,15 @@ HEADERS += \
     operation/operation.h \
     operation/mepoperationgenerator.h \
     fitness/mepfitnessgenerator.h \
-    gene/morphogene.h
+    gene/morphogene.h \
+    gene/threshgene.h \
+    parser/mepparser.h \
+    core/mepcore.h \
+    gene/genes.h \
+    mepalgorithm.h \
+    selection/selection.h \
+    fitness/fitness.h \
+    #fitness/hausdorffextractor.h
 
 
     library.path = $$_PRO_FILE_PWD_/../lib
