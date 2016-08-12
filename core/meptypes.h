@@ -88,4 +88,25 @@ struct MEPSHARED_EXPORT MEPId
     //std::string toString() const;
 //};
 
+struct Stats
+{
+    Stats(int chromosomeSize, int populationSize, int nIterations):
+        selectionRank(populationSize, 0),
+        avarageFitness(nIterations, 0),
+        fitness(nIterations, 0),
+        avarageFitnessBest(nIterations),
+        nMutation(0), nBetterAfterMutation(0),
+        nCrossover(0), nBetterAfterCrossover(0) {}
+    std::vector<int> selectionRank;
+    std::vector<double> avarageFitness;
+    std::vector<int> fitness;
+    std::vector<int> avarageFitnessBest;
+    int nMutation;
+    int nBetterAfterMutation;
+    int nCrossover;
+    int nBetterAfterCrossover;
+
+    std::string toString() const;
+};
+
 #endif // MEPTYPES_H

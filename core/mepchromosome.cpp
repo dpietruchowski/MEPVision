@@ -85,45 +85,6 @@ void MEPChromosome::cloneCompositeObject(const MEPComposite& rhs,
     MEPComposite::addObject(clone, args);
 }
 
-MEPObjectPtr MEPChromosome::reproduce(MEPSelectionType type,
-                                      MEPGenerator &generator,
-                                      double probability) const
-{
-    MEPObjectPtr chromosome = generator.createChromosome();
-    MEPComposite& chromosomeComposite = dynamic_cast<MEPComposite&> (*chromosome);
-    for(int i = 0; i < 2; i++)
-    {
-        MEPObjectPtr gene;
-        gene = generator.createGene();
-        while(dynamic_cast<MEPGene&>(*gene).getNArguments() != 0)
-            gene = generator.createGene();
-        chromosomeComposite.addObject(gene);
-    }
-    while(chromosome->isValid() == false)
-    {
-        double random = (double)std::rand() / (RAND_MAX);
-        if(random < probability)
-        {
-            MEPObjectPtr gene;
-            gene = generator.createGene();
-            std::vector<int> args;
-            for(int i = 0;
-                i < dynamic_cast<MEPGene&>(*gene).getNArguments();
-                ++i)
-                args.push_back(std::rand() % chromosomeComposite.getSize());
-            chromosomeComposite.addObject(gene, args);
-        } else
-        {
-            const MEPComposite& selectedChromosome = dynamic_cast<const MEPComposite&>
-                                                     (select(type));
-            chromosomeComposite.reproduceCompositeObject(selectedChromosome,
-                                                         type);
-        }
-    }
-
-    return chromosome;
-}
-
 void MEPChromosome::addObject(Objects& genes,
                               MEPObject& gene,
                               std::vector<int>& args)

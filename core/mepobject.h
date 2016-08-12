@@ -46,18 +46,21 @@ public:
     MEPObjectPtr clone() const;
         /// Getters and isers
     int getScore() const;
+    int getRank() const;
     const MEPId& getId() const;
     MEPState getState() const;
     bool isClone(const MEPObject&) const;
     virtual bool isValidResults() const = 0;
     virtual bool isValid() const = 0;
-    void show();
+    virtual void show();
+    void show(const std::string& windowName);
 //    void showTree() const;
     void clearResult();
     void clearResults();
         /// For algorithm
     virtual void init(MEPGenerator&) {}
     void run(MEPFitness&);
+    void sort();
     void addToSelection(MEPSelection&) const;
 
 protected:
@@ -74,6 +77,7 @@ private:
     virtual MEPObjectPtr cloneObject() const = 0;
 
     virtual int runObject(MEPFitness&) = 0;
+    virtual int sortObject() { return 0; }
 private:
     MEPId id_;
     int score_;

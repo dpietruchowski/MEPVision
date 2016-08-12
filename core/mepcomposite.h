@@ -18,8 +18,10 @@ public:
     void init(MEPGenerator&);
 
     int getSize() const;
+    int getSumScore() const;
     bool isValid() const;
     bool isValidResults() const;
+    void show();
     std::vector<bool> isObjectsClone(const MEPComposite&);
     std::vector<bool> compare(const MEPComposite &rhs, int size) const;
 
@@ -33,16 +35,14 @@ public:
                    int endGeneNumber);
     void addObject(MEPObjectPtr object,
                    std::vector<int> args = std::vector<int>());
+    bool setObject(MEPObjectPtr object,
+                   std::vector<int> args = std::vector<int>());
 
-    virtual MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
-                                   double probability) const = 0;
-    void reproduceCompositeObject(const MEPComposite& rhs, MEPSelectionType);
     const MEPObject& select(MEPSelectionType) const;
 
 protected:
     void swap(MEPComposite&);
 private:
-    void sort();
     //Dziedziczace po MEPObject
     void saveObject(std::string&) const;
     void writeObject(std::string&) const;
@@ -51,6 +51,7 @@ private:
 //    void showObjectTree(const std::string& id) const;
     void clearObjectResults();
 
+    int sortObject();
     int runObject(MEPFitness& fitness);
 
     virtual void addObject(Objects&, MEPObject&, std::vector<int>&) {}

@@ -7,7 +7,7 @@ struct MorphoParameters
 {
     const static int MAX_WIDTH = 10;
     const static int MAX_HEIGHT = 10;
-    const static int MAX_ITER = 10;
+    const static int MAX_ITER = 2;
     static MorphoParameters getRandom();
     int morphType; // max 6
 //    int morphShape; // max 2

@@ -8,7 +8,7 @@
 class MEPParser
 {
 public:
-    MEPObjectPtr getChromosome() const;
+    MEPObjectPtr getChromosome(MEPId &bestGeneId) const;
     bool isParsed() const;
     void parse();
 public:

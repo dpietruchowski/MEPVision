@@ -53,16 +53,11 @@ const MEPObject &MEPComposite::select(MEPSelectionType type) const
     }
 
     selection->calcScores();
-    const MEPObject& selected = findByRank(selection->getSelectedRank());
+    int selectedRank = selection->getSelectedRank();
+    const MEPObject& selected = findByRank(selectedRank);
 
     delete selection;
     return selected;
-}
-
-void MEPComposite::reproduceCompositeObject(const MEPComposite &rhs,
-                                            MEPSelectionType type)
-{
-   cloneCompositeObject(rhs, rhs.find(rhs.select(type)));
 }
 
 void MEPComposite::init(MEPGenerator& generator)
@@ -70,16 +65,19 @@ void MEPComposite::init(MEPGenerator& generator)
     initComposite(generator, size_);
 }
 
-void MEPComposite::sort()
+int MEPComposite::sortObject()
 {
     if(!isValid())
         throw std::string("MEPComposite::sort: Object is invalid");
     
+    double sum;
     vector<MEPObject*> sorted;
     for(auto& obj : objects_)
     {
+        sum += obj->getScore();
         sorted.push_back(obj.get());
     }
+    normalized_ = sum / getSize();
 
     std::sort(sorted.begin(),sorted.end(),
               [](const MEPObject* lhs, const MEPObject* rhs) -> bool
@@ -90,6 +88,8 @@ void MEPComposite::sort()
     {
         sorted[i]->setAsNext(*sorted[i-1]);
     }
+
+    return findByRank(0).getScore();
 }
 
 void MEPComposite::saveObject(string &object) const
@@ -98,6 +98,8 @@ void MEPComposite::saveObject(string &object) const
     for(const auto& obj: objects_)
     {
         object += obj->save();
+        if(obj->getRank() == 0)
+            object += "$";
         object += "\n";
     }
 }
@@ -184,9 +186,38 @@ void MEPComposite::addObject(MEPObjectPtr object, std::vector<int> args)
         throw std::string("MEPComposite::addObject: Can not add object, composite is full");
 }
 
+bool MEPComposite::setObject(MEPObjectPtr object, std::vector<int> args)
+{
+    if(isValid() == false)
+        throw std::string("MEPComposite::setObject: Can not add object, composite is full");
+
+    sort();
+    const MEPObject& worst = findByRank(getSize() - 1);
+    if(*object < worst)
+    {
+        objects_.erase(objects_.begin() + find(worst));
+        addObject(move(object), args);
+
+        return true;
+    }
+
+    return false;
+}
+
 int MEPComposite::getSize() const
 {
     return objects_.size();
+}
+
+int MEPComposite::getSumScore() const
+{
+    int sum = 0;
+    for(const auto &obj: objects_)
+    {
+        sum += obj->getScore();
+    }
+
+    return sum;
 }
 
 void MEPComposite::writeObject(std::string& object) const
@@ -196,15 +227,13 @@ void MEPComposite::writeObject(std::string& object) const
     object += " ";
     object += std::to_string(normalized_);
     object += "\n";
-    int i = 0;/*
+    int i = 0;
     for(const auto& obj: objects_)
     {
-        object += scores[i].toString();
-        object += "   ";
         object += obj->writeObject();
         object += "\n";
         ++i;
-    }*/
+    }
 }
 
 void MEPComposite::writeObjectTree(std::string& object) const
@@ -220,7 +249,7 @@ void MEPComposite::writeObjectTree(std::string& object) const
     }
 }
 
-void MEPComposite::showObject(const string&)
+void MEPComposite::show()
 {
     if(!isValid())
         throw std::string("MEPComposite::showObject: Object is invalid");
@@ -228,6 +257,17 @@ void MEPComposite::showObject(const string&)
     for(const auto& obj: objects_)
     {
         obj->show();
+    }
+}
+
+void MEPComposite::showObject(const string& nameWindow)
+{
+    if(!isValid())
+        throw std::string("MEPComposite::showObject: Object is invalid");
+
+    for(const auto& obj: objects_)
+    {
+        obj->show(nameWindow);
     }
 }
 
@@ -252,7 +292,6 @@ int MEPComposite::runObject(MEPFitness& fitness)
     {
         obj->run(fitness);
     }
-    sort();
     int i = 0;
     int sum = 0;
     for(const auto& obj: boost::adaptors::reverse(objects_))
@@ -260,13 +299,14 @@ int MEPComposite::runObject(MEPFitness& fitness)
         sum+= obj->getScore();
         i++;
     }
-    normalized_=sum/i;
+    int bestScore = sortObject();
+    normalized_=sum/getSize();
     if(getId().type == MEPPOPULATION) {
         std::cout << "///////// Srednia ocena osobnika:" << normalized_ << "/////////"
                   << std::endl;
         std::cout << "///////// Ocena najlepszego osobnika:" << findByRank(0).getScore()
               << "/////////" << std::endl << std::endl; }
-    return findByRank(0).getScore();
+    return bestScore;
 }
 
 void MEPComposite::clearObjectResults()

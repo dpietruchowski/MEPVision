@@ -9,77 +9,110 @@
 #include "core/mepcore.h"
 #include "parser/mepparser.h"
 #include "mepalgorithm.h"
+#include "generationalalgorithm.h"
+#include "steadystatealgorithm.h"
 
 using namespace std;
 
-static void parse()
+static void parse(char *algName, char *imgName)
 {
-    MEPParser parser("Best.txt");
+    MEPParser parser(algName);
+    cv::Mat inputImg = cv::imread(imgName, 0);
+    TerminalGene::getTerminalSet().setInputImage(MatPtr(new cv::Mat(inputImg)));
     parser.parse();
 
-    MEPObjectPtr chromosome = parser.getChromosome();
-    cv::Mat refImg = cv::imread("auto_ref.png", 0);
-    MEPFitness *fitness = Hamming::create(refImg);
+    MEPId bestGeneId;
+    MEPObjectPtr chromosome = parser.getChromosome(bestGeneId);
+    bestGeneId.cloneNumber = 1;
 
-    //chromosome->run(*fitness);
+    MEPChromosome &ch = dynamic_cast<MEPChromosome&> (*chromosome);
 
-    ThreshParameters param(105,0);
+    ThreshParameters param(125,0);
     ThreshGene gene(ThreshGene::thresholdOperation, param, {MEPTHRESHGENE, 0, 0});
 
-    MEPChromosome ch({MEPCHROMOSOME, 0, 0}, 31);
-    ch.clonePart(dynamic_cast<MEPComposite&>(*chromosome),0,29);
+    MEPChromosome maskChromosome({MEPCHROMOSOME, 0, 0}, ch.getSize() + 1);
+    maskChromosome.clonePart(dynamic_cast<MEPComposite&>(*chromosome),0,ch.getSize() - 1);
     vector<int> args;
-    args.push_back(28);
-    dynamic_cast<MEPComposite&>(ch).addObject(gene.clone(), args);
+    args.push_back(ch.findNumber(bestGeneId));
+    dynamic_cast<MEPComposite&>(maskChromosome).addObject(gene.clone(), args);
 
     Gene& bestGene = const_cast<Gene&> (dynamic_cast<const Gene&>
                                             (dynamic_cast<MEPComposite&>(
-                                                 ch).findByOrder(30)));
+                                                 maskChromosome).findByOrder(maskChromosome.getSize() - 1)));
     bestGene.runGeneTree();
-    std::string name = "UDALO SIE";
-    name += ".png";
-    cv::imwrite(name, bestGene.getResult());
-
-    delete fitness;
+    cv::imwrite("output.png", bestGene.getResult());
 }
 
 static void algorithm()
 {
-    MEPAlgorithm mep;
+    GenerationalAlgorithm mep;
     mep.selectionType = RANK_ROULETTESELECTION;
-    mep.setChromosomeSize(20);
-    mep.setPopulationSize(100);
+    mep.setChromosomeSize(100);
+    mep.setPopulationSize(50);
     mep.nIterations = 200;
 ////////////////////////////////////////////
-    mep.setInputImage("auto2.png");
-    mep.setReferenceImage("auto2_ref.png");
+    mep.setInputImage("auto.png");
+    mep.setReferenceImage("auto_ref.png");
 ////////////////////////////////////////////
     mep.registerGene(0.1, TERMINALGENE);
-    mep.registerGene(0.2, FUNCTIONGENE);
+    mep.registerGene(0.1, FUNCTIONGENE);
 
-    double sumPro = mep.registerGene(0.5, MORPHOGENE);
+    double sumPro = mep.registerGene(0.8, MORPHOGENE);
     mep.registerGene(1 - sumPro, THRESHGENE);
 ///////////////////////////////////////////
-    mep.registerFitness(0.85, HAMMING);
+    mep.registerFitness(1, HAMMING);
 
-    sumPro = mep.registerFitness(0.1, HAUSDORFF_CANNY);
-    mep.registerFitness(1 - sumPro, HAUSDORFF_SMALL);
+//    sumPro = mep.registerFitness(0.05, HAUSDORFF_CANNY);
+//    mep.registerFitness(1 - sumPro, HAUSDORFF_SMALL);
 ///////////////////////////////////////////
-    mep.registerOperation(0.15, UNIFORM_ARGUMENTMUTATION);
-    mep.registerOperation(0.15, UNIFORM_ATTRIBUTEMUTATION);
+    mep.registerOperation(0.15, WORST_ARGUMENTMUTATION);
+    mep.registerOperation(0.15, WORST_ATTRIBUTEMUTATION);
+    mep.registerOperation(0.2, WORST_COMBINEDMUTATION);
 
-    sumPro = mep.registerOperation(0.2, UNIFORM_COMBINEDMUTATION);
-    mep.registerOperation(1 - sumPro, UNIFORM_CROSSOVER);
+    sumPro = mep.registerOperation(0.2, ONEPOINT_CROSSOVER);
+    mep.registerOperation(1 - sumPro, BETTERGENE_CROSSOVER);
 //////////////////////////////////////////
 
     mep.run();
 }
 
-int main()
+void steadystate()
+{
+
+    SteadyStateAlgorithm mep;
+    mep.selectionType = RANK_ROULETTESELECTION;
+    mep.setChromosomeSize(20);
+    mep.setPopulationSize(15);
+    mep.nIterations = 200;
+////////////////////////////////////////////
+    mep.setInputImage("auto_bin.png");
+    mep.setReferenceImage("auto_ref.png");
+////////////////////////////////////////////
+    mep.registerGene(0.1, TERMINALGENE);
+    mep.registerGene(0.0, FUNCTIONGENE);
+
+    double sumPro = mep.registerGene(0.9, MORPHOGENE);
+    mep.registerGene(1 - sumPro, THRESHGENE);
+///////////////////////////////////////////
+    mep.setFitnessType(HAMMING);
+///////////////////////////////////////////
+    mep.registerMutation(0.15, UNIFORM_ARGUMENTMUTATION);
+    sumPro = mep.registerMutation(0.15, UNIFORM_ATTRIBUTEMUTATION);
+    mep.registerMutation(1 - sumPro, UNIFORM_COMBINEDMUTATION);
+    mep.registerCrossover(0.5, UNIFORM_CROSSOVER);
+    sumPro = mep.registerCrossover(0.3, TWOPOINT_CROSSOVER);
+    mep.registerCrossover(1 - sumPro, ONEPOINT_CROSSOVER);
+//////////////////////////////////////////
+
+    mep.run();
+}
+
+int main(int argc, char* argv[])
 {
     srand(time(NULL));
-//    parse();
+//    parse(argv[1], argv[2]);
     algorithm();
+//    steadystate();
 
     return 0;
 }

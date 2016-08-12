@@ -13,7 +13,7 @@ FunctionSet::FunctionSet()
 
     f = make_pair(2, FunctionSet::absDiff);
     p = make_pair("absDiff", f);
-    functionsNotAdded_.insert(p);
+//    functionsNotAdded_.insert(p);
     f = make_pair(2, FunctionSet::addF);
     p = make_pair("addF", f);
     //functionsNotAdded_.insert(p);              <-----------------nie dodana
@@ -41,7 +41,7 @@ FunctionSet::FunctionSet()
 
     f = make_pair(1, FunctionSet::hitMiss);
     p = make_pair("hitMiss", f);
-    functionsNotAdded_.insert(p);      //        <-----------------nie dodana
+//    functionsNotAdded_.insert(p);      //        <-----------------nie dodana
 
     addAllFunctions();
 }

@@ -13,9 +13,7 @@ public:
     MEPPopulation& operator =(const MEPPopulation&);
     void swap(MEPPopulation&);
     MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
-                           MEPOperationGenerator&) const;
-    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
-                           double probability) const;
+                           MEPOperationGenerator&, Stats &stats, MEPFitness *fitness) const;
 
 private:
     void initComposite(MEPGenerator&, int size);

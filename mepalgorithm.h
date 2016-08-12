@@ -18,6 +18,7 @@ enum OperationType
   UNIFORM_CROSSOVER, ONEPOINT_CROSSOVER, TWOPOINT_CROSSOVER,
   BETTERGENE_CROSSOVER };
 typedef MEPSelectionType SelectionType;
+enum AlgorithmType { STEADY_STATE, GENERATIONAL };
 
 class MEPAlgorithm
 {
@@ -27,7 +28,6 @@ public:
 public:
     double registerGene(double probability, GeneType type);
     double registerFitness(double probability, FitnessType type);
-    double registerOperation(double probability, OperationType type);
     void setInputImage(const std::string& path);
     void setReferenceImage(const std::string& path);
     void setChromosomeSize(int size);
@@ -39,31 +39,35 @@ public:
     int nIterations;
     std::string savePath;
 
-    int chromosomeSize() const;
-
-private:
+protected:
+    MEPPopulation population_;
     void saveImage(int i);
     void saveAlgorithm(int i);
+    void saveStats(Stats& stats);
+    void swapFitnessGenerator(MEPFitnessGenerator& generator);
+
+private:
+    virtual void runAlgorithm(int i, MEPFitness *fitness,
+                         MEPGenerator& generator, Stats& stats) = 0;
+    virtual void setNMutatedGene(int size) = 0;
+
     void parseOptions(const std::string& path);
     static MEPObjectPtr createChromosome(unsigned int number);
     static MEPObjectPtr createPopulation(unsigned int number);
 
 
 private:
+    MEPFitnessGenerator fitnessGenerator_;
     static int ChromosomeSize;
     static int PopulationSize;
-    MEPPopulation population_;
     MEPGenerator generator_;
-    MEPFitnessGenerator fitnessGenerator_;
-    MEPOperationGenerator operationGenerator_;
     cv::Mat inputImage_;
     cv::Mat referenceImage_;
     int chromosomeSize_;
     int populationSize_;
 
-    double sumProGene_;
     double sumProFitness_;
-    double sumProOperation_;
+    double sumProGene_;
 
 };
 

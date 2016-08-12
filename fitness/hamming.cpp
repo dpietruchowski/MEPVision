@@ -33,5 +33,12 @@ int Hamming::fitness(cv::Mat &A, cv::Mat &B) const
         measure += (refNonZero - inpNonZero) * 10;
     }
 
+    inpNonZero = cv::countNonZero(A); //biale pixele wejsciowe
+    refNonZero = cv::countNonZero(B); //biale pixele referencyjne
+    if(inpNonZero < refNonZero)
+    {
+        measure += (refNonZero - inpNonZero) * 10;
+    }
+
     return measure;
 }

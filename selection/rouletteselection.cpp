@@ -18,7 +18,7 @@ int RouletteSelection::select(const Scores& scores) const
     {
         sum += score.normalized;
         if(decision <= sum)
-            return i;
+            return score.rank;
         i++;
     }
     //should never get here

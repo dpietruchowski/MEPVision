@@ -12,7 +12,7 @@ MEPObjectPtr MEPObjectGenerator::createRandomPtr()
     CreationCounter<CreateObjectFunction> counter = generator_.createRandom();
     CreateObjectFunction function = counter.callbackFunction;
 
-    MEPObjectPtr object = function(objectCounter_);
+    MEPObjectPtr object = function(counter.nCreation);
     objectCounter_++;
     return object;
 }

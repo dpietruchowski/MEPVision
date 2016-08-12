@@ -31,7 +31,9 @@ void MEPPopulation::swap(MEPPopulation& rhs)
 
 MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
                                 MEPGenerator &generator,
-                                MEPOperationGenerator &operationGenerator) const
+                                MEPOperationGenerator &operationGenerator,
+                                Stats& stats,
+                                MEPFitness *fitness) const
 {
     MEPObjectPtr child = generator.createPopulation();
     MEPComposite& childComposite = dynamic_cast<MEPComposite&> (*child);
@@ -44,13 +46,32 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
         MEPOperation *operation = operationGenerator.createRandomPtr();
 
         MEPChromosomes parents;
+        if(operation->getNParents() == 1)
+            stats.nMutation++;
+        else
+            stats.nCrossover++;
+
+        int parentBestFitness = 10000000;
         for(int k = 0; k < operation->getNParents(); ++k)
         {
             const MEPObject& selected = select(type);
+            if(selected.getScore() < parentBestFitness)
+                parentBestFitness = selected.getScore();
+            stats.selectionRank[selected.getRank()] ++;
             parents.push_back(dynamic_cast<const MEPChromosome&> (selected));
         }
 
         MEPObjectPtr reproduced = operation->reproduce(parents, generator);
+
+        reproduced->run(*fitness);
+        int offspringFitness = reproduced->getScore();
+
+        if(offspringFitness < parentBestFitness)
+            if(operation->getNParents() == 1)
+                stats.nBetterAfterMutation++;
+            else
+                stats.nBetterAfterCrossover++;
+
         childComposite.addObject(reproduced);
 
         i++;
@@ -84,50 +105,4 @@ void MEPPopulation::cloneCompositeObject(const MEPComposite& rhs,
 {
     const MEPObject& object = rhs.findByOrder(objectNumber);
     addObject(object.clone());
-}
-
-MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
-                                      MEPGenerator &generator,
-                                      double probability) const
-{
-    MEPObjectPtr child = generator.createPopulation();
-    MEPComposite& childComposite = dynamic_cast<MEPComposite&> (*child);
-
-    while(child->isValid() == false)
-    {
-        MEPObjectPtr chromosome = generator.createChromosome();
-        MEPComposite& chromosomeComposite = dynamic_cast<MEPComposite&> (*chromosome);
-        for(int i = 0; i < 2; i++)
-        {
-            MEPObjectPtr gene;
-            gene = generator.createGene();
-            while(dynamic_cast<MEPGene&>(*gene).getNArguments() != 0)
-                gene = generator.createGene();
-            chromosomeComposite.addObject(gene);
-        }
-        while(chromosome->isValid() == false)
-        {
-            double random = (double)std::rand() / (RAND_MAX);
-            if(random < probability)
-            {
-                MEPObjectPtr gene;
-                gene = generator.createGene();
-                std::vector<int> args;
-                for(int i = 0;
-                    i < dynamic_cast<MEPGene&>(*gene).getNArguments();
-                    ++i)
-                    args.push_back(std::rand() % chromosomeComposite.getSize());
-                chromosomeComposite.addObject(gene, args);
-            } else
-            {
-                const MEPComposite& selectedChromosome = dynamic_cast<const MEPComposite&>
-                                                         (select(type));
-                chromosomeComposite.reproduceCompositeObject(selectedChromosome,
-                                                             type);
-            }
-        }
-        childComposite.addObject(chromosome);
-    }
-
-    return child;
 }

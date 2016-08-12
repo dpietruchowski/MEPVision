@@ -15,8 +15,6 @@ public:
     MEPChromosome(const MEPChromosome&);
     MEPChromosome& operator =(const MEPChromosome&);
     void swap(MEPComposite&);
-    MEPObjectPtr reproduce(MEPSelectionType, MEPGenerator&,
-                           double probability) const;
 
 private:
     virtual void addObject(Objects&, MEPObject&, std::vector<int>&);

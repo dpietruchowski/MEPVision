@@ -68,6 +68,11 @@ void MEPObject::show()
     showObject(id_.toString());
 }
 
+void MEPObject::show(const string &windowName)
+{
+    showObject(windowName);
+}
+
 //void MEPObject::showTree()
 //{
 //    showObjectTree(id_.toString());
@@ -83,8 +88,8 @@ std::string MEPObject::writeObject() const
     std::string object;
 
     object += id_.toString();
-    object += " ";
-    object += enumToString(getState());
+    //object += " ";
+    //object += enumToString(getState());
     int nSpaces = 35 - object.size();
     for(int i = 0; i < nSpaces; i++)
     {
@@ -139,6 +144,11 @@ void MEPObject::run(MEPFitness& fitness)
     clearResult();
 }
 
+void MEPObject::sort()
+{
+    score_ = sortObject();
+}
+
 MEPObjectPtr MEPObject::clone() const
 {
     MEPObjectPtr objectClone = cloneObject();
@@ -149,6 +159,11 @@ MEPObjectPtr MEPObject::clone() const
 int MEPObject::getScore() const
 {
     return score_;
+}
+
+int MEPObject::getRank() const
+{
+    return rank_;
 }
 
 const MEPId& MEPObject::getId() const

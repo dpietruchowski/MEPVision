@@ -1,6 +1,7 @@
 #include "mepalgorithm.h"
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
+#include <iterator>
 
 using namespace std;
 
@@ -9,7 +10,7 @@ int MEPAlgorithm::PopulationSize;
 
 MEPAlgorithm::MEPAlgorithm():
     population_({MEPPOPULATION, 0, 0}, 100),
-    sumProGene_(0), sumProFitness_(0), sumProOperation_(0)
+    sumProGene_(0), sumProFitness_(0)
 {
     generator_.registerChromosome(MEPAlgorithm::createChromosome);
     generator_.registerPopulation(MEPAlgorithm::createPopulation);
@@ -64,70 +65,6 @@ double MEPAlgorithm::registerFitness(double probability, FitnessType type)
     return sumProFitness_;
 }
 
-double MEPAlgorithm::registerOperation(double probability, OperationType type)
-{
-    switch(type)
-    {
-    case RAND_ARGUMENTMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           RandArgumentMutation::create);
-        break;
-    case WORST_ARGUMENTMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           WorstArgumentMutation::create);
-        break;
-    case UNIFORM_ARGUMENTMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           UniformArgumentMutation::create);
-        break;
-    case RAND_ATTRIBUTEMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           RandAttributeMutation::create);
-        break;
-    case WORST_ATTRIBUTEMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           WorstAttributeMutation::create);
-        break;
-    case UNIFORM_ATTRIBUTEMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           UniformAttributeMutation::create);
-        break;
-    case RAND_COMBINEDMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           RandCombinedMutation::create);
-        break;
-    case WORST_COMBINEDMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           WorstCombinedMutation::create);
-        break;
-    case UNIFORM_COMBINEDMUTATION:
-        operationGenerator_.registerObject(probability,
-                                           UniformCombinedMutation::create);
-        break;
-    case UNIFORM_CROSSOVER:
-        operationGenerator_.registerObject(probability,
-                                           UniformCrossover::create);
-        break;
-    case ONEPOINT_CROSSOVER:
-        operationGenerator_.registerObject(probability,
-                                           OnePointCrossover::create);
-        break;
-    case TWOPOINT_CROSSOVER:
-        operationGenerator_.registerObject(probability,
-                                           TwoPointCrossover::create);
-        break;
-    case BETTERGENE_CROSSOVER:
-        operationGenerator_.registerObject(probability,
-                                           BetterGeneCrossover::create);
-        break;
-    default:
-        break;
-    }
-
-    sumProOperation_ += probability;
-    return sumProOperation_;
-}
-
 void MEPAlgorithm::setInputImage(const std::string &path)
 {
     inputImage_ = cv::imread(path, 0);
@@ -143,39 +80,36 @@ void MEPAlgorithm::setReferenceImage(const std::string &path)
 void MEPAlgorithm::setChromosomeSize(int size)
 {
     chromosomeSize_ = size;
-    operationGenerator_.setMaxNMutatedGene(chromosomeSize_/2 - 1);
+    setNMutatedGene(size);
     ChromosomeSize = chromosomeSize_;
 }
 
 void MEPAlgorithm::setPopulationSize(int size)
 {
     populationSize_ = size;
+    population_ = MEPPopulation({MEPPOPULATION, 0, 0}, size);
     PopulationSize = populationSize_;
 }
 
 void MEPAlgorithm::run()
 {
+    Stats stats(chromosomeSize_, populationSize_, nIterations);
     population_.init(generator_);
+
+    MEPFitness *fitness = fitnessGenerator_.createRandomPtr();
+    population_.run(*fitness);
+    delete fitness;
     for(int i = 0; i < nIterations; ++i)
     {
-        cout << "Iteracja nr " << i << " " << flush;
-        MEPFitness *fitness = fitnessGenerator_.createRandomPtr();
-        population_.run(*fitness);
-
-        saveImage(i);
-        saveAlgorithm(i);
-
-        MEPObjectPtr reproducedPopulation = population_.
-                                                reproduce(selectionType,
-                                                          generator_,
-                                                          operationGenerator_);
-//        MEPObjectPtr reproducedPopulation = population_.
-//                                                reproduce(selectionType,
-//                                                          generator_,
-//                                                          0.9);
-        population_.swap(dynamic_cast<MEPPopulation&>(*reproducedPopulation));
-
-        cout << endl;
+        if(i == 150)
+        {
+            MEPFitnessGenerator generator;
+            swapFitnessGenerator(generator);
+            registerFitness(1, HAUSDORFF_CANNY);
+        }
+        fitness = fitnessGenerator_.createRandomPtr();
+        runAlgorithm(i, fitness, generator_, stats);
+        saveStats(stats);
         delete fitness;
     }
 }
@@ -192,7 +126,9 @@ void MEPAlgorithm::saveImage(int i)
     string name = "Best ";
     name += to_string(i);
     name += ".png";
-    imwrite(savePath + name, bestGene.getResult());
+    cv::Mat result = bestGene.getResult();
+    cv::threshold(result,result,125,255,0);
+    imwrite(savePath + name, result);
     bestGene.clearResult();
 }
 
@@ -210,6 +146,22 @@ void MEPAlgorithm::saveAlgorithm(int i)
     file.open(savePath + name, fstream::out);
     file << bestChromosome.save();
     file.close();
+}
+
+void MEPAlgorithm::saveStats(Stats &stats)
+{
+    string name = "Stats2";
+    name += ".txt";
+    fstream file;
+    file.open(savePath + name, fstream::out);
+    file << stats.toString();
+    file.close();
+}
+
+void MEPAlgorithm::swapFitnessGenerator(MEPFitnessGenerator &generator)
+{
+    std::swap(fitnessGenerator_, generator);
+    fitnessGenerator_.setReferenceImage(referenceImage_);
 }
 
 void MEPAlgorithm::parseOptions(const std::string &path)

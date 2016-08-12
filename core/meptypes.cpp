@@ -1,6 +1,7 @@
 #include "meptypes.h"
 
 #include <utility>
+#include <iterator>
 
 using namespace std;
 
@@ -88,3 +89,25 @@ void MEPId::fromString(const string &id)
 //    return sScore;
 //}
 
+
+string Stats::toString() const
+{
+    stringstream sr, af, f, afb;
+    copy(selectionRank.begin(), selectionRank.end(), std::ostream_iterator<int>(sr, ","));
+    copy(avarageFitness.begin(), avarageFitness.end(), std::ostream_iterator<int>(af, ","));
+    copy(fitness.begin(), fitness.end(), std::ostream_iterator<int>(f, ","));
+    copy(avarageFitnessBest.begin(), avarageFitnessBest.end(), std::ostream_iterator<int>(afb, ","));
+
+    string output;
+
+    output += "selection \n" + sr.str() + "\n";
+    output += "avarage fitness per gen \n" + af.str() + "\n";
+    output += "best fitessn per gen \n" + f.str() + "\n";
+    output += "avarage best fitness per gen \n" + afb.str() + "\n";
+    output += "number of mutation " + to_string(nMutation) + "\n";
+    output += "number of better offspring than partents " + to_string(nBetterAfterMutation) + "\n";
+    output += "number of crossver " + to_string(nCrossover) + "\n";
+    output += "number of better offspring than parents " + to_string(nBetterAfterCrossover) + "\n";
+
+    return output;
+}

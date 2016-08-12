@@ -5,9 +5,13 @@
 
 using namespace std;
 
-MEPObjectPtr MEPParser::getChromosome() const
+MEPObjectPtr MEPParser::getChromosome(MEPId &bestGeneId) const
 {
     MEPObjectPtr cloned = chromosome_.clone();
+    const MEPObject& bestGene = chromosome_.findByRank(0);
+    bestGeneId = MEPId(bestGene.getId().type,
+                       bestGene.getId().number,
+                       bestGene.getId().cloneNumber);
 
     return cloned;
 }
@@ -96,6 +100,9 @@ void MEPParser::parse()
             throw std::string("MEPParser::parse: Wrong type");
         }
 
+        if(line.find("$") != string::npos)
+            gene->setAsFirst();
+
         ///////// Children Number //////////
         int size = stoi(sections_[1]);
         ////////////////////////////////////
@@ -150,7 +157,7 @@ void MEPParser::parseLine(const string &line)
     int size = stoi(sections_[1]);
     for(int i = 0; i < size; ++i)
     {
-        startPos = line.find_first_of("!");
+        startPos = line.find_first_of("!", endPos);
         endPos = line.find_first_of("!", startPos+1);
         string section = line.substr(startPos+1, endPos - startPos - 1);
         sections_.push_back(section);

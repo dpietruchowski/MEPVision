@@ -51,6 +51,9 @@ SOURCES += main.cpp \
     parser/mepparser.cpp \
     mepalgorithm.cpp \
     #fitness/hausdorffextractor.cpp
+    fitness/cvhausdorff.cpp \
+    steadystatealgorithm.cpp \
+    generationalalgorithm.cpp
 
 HEADERS += \
     mep_global.h \
@@ -97,6 +100,9 @@ HEADERS += \
     selection/selection.h \
     fitness/fitness.h \
     #fitness/hausdorffextractor.h
+    fitness/cvhausdorff.h \
+    steadystatealgorithm.h \
+    generationalalgorithm.h
 
 
     library.path = $$_PRO_FILE_PWD_/../lib
