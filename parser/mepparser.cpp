@@ -125,7 +125,7 @@ void MEPParser::parse()
 }
 
 MEPParser::MEPParser(const std::string &path):
-    chromosome_({MEPCHROMOSOME, 0, 0}, 10), lineNumber_(0)
+    lineNumber_(0), chromosome_({MEPCHROMOSOME, 0, 0}, 10)
 {
     file_.open(path, ios_base::in);
     parsed_ = false;

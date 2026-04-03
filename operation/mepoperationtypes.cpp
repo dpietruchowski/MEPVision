@@ -108,12 +108,9 @@ UniformPoints::UniformPoints()
 
 void UniformPoints::calcPoints(const MEPChromosomes& parents, Points& points)
 {
-    int nParents = static_cast<int>(parents.size());
-
     int maxPoint = parents[0].get().getSize();
     int i = 0;
     points.push_back(rand(2, maxPoint/2));
-    Points::reverse_iterator it = points.rbegin();
     while(*points.rbegin() < (maxPoint - 2))
     {
         points.push_back(rand(points[i] + 1, maxPoint));

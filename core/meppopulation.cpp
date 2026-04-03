@@ -1,6 +1,7 @@
 #include "meppopulation.h"
 #include "mepchromosome.h"
 #include "fitness/hamming.h"
+#include <memory>
 #include <iostream>
 
 using namespace std;
@@ -43,7 +44,7 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
     childComposite.addObject(bestClone);
     while(child->isValid() == false)
     {
-        MEPOperation *operation = operationGenerator.createRandomPtr();
+        std::unique_ptr<MEPOperation> operation(operationGenerator.createRandomPtr());
 
         MEPChromosomes parents;
         if(operation->getNParents() == 1)
@@ -66,16 +67,16 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
         reproduced->run(*fitness);
         int offspringFitness = reproduced->getScore();
 
-        if(offspringFitness < parentBestFitness)
+        if(offspringFitness < parentBestFitness) {
             if(operation->getNParents() == 1)
                 stats.nBetterAfterMutation++;
             else
                 stats.nBetterAfterCrossover++;
+        }
 
         childComposite.addObject(reproduced);
 
         i++;
-        delete operation;
     }
 
     return child;

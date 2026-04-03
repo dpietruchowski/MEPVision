@@ -14,7 +14,7 @@
 
 using namespace std;
 
-static void parse(char *algName, char *imgName)
+void parse(char *algName, char *imgName)
 {
     MEPParser parser(algName);
     cv::Mat inputImg = cv::imread(imgName, 0);
@@ -43,7 +43,7 @@ static void parse(char *algName, char *imgName)
     cv::imwrite("output.png", bestGene.getResult());
 }
 
-static void algorithm()
+void algorithm()
 {
     GenerationalAlgorithm mep;
     mep.selectionType = RANK_ROULETTESELECTION;
@@ -107,7 +107,7 @@ void steadystate()
     mep.run();
 }
 
-int main(int argc, char* argv[])
+int main(int /*argc*/, char* /*argv*/[])
 {
     srand(time(NULL));
 //    parse(argv[1], argv[2]);

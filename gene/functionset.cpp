@@ -243,14 +243,18 @@ void FunctionSet::clear()
 
 void FunctionSet::addFunction(string name)
 {
-    Functions::iterator it;
-    it = functionsNotAdded_.find(name);
+    Functions::iterator it = functionsNotAdded_.find(name);
+    if(it == functionsNotAdded_.end())
+        throw std::string("FunctionSet::addFunction: Function not found: " + name);
     functions_.insert(make_pair(it->first, it->second));
 }
 
 void FunctionSet::deleteFunction(string name)
 {
-    functions_.erase(functions_.find(name));
+    Functions::iterator it = functions_.find(name);
+    if(it == functions_.end())
+        throw std::string("FunctionSet::deleteFunction: Function not found: " + name);
+    functions_.erase(it);
 }
 
 int FunctionSet::getSize() const
@@ -262,14 +266,11 @@ std::pair<FunctionId,FunctionPtr>  FunctionSet::getFunction(int number) const
 {
     if(number >= this->getSize())
     {
-        throw "Argument wiekszy niz liczba funkcji";
+        throw std::string("FunctionSet::getFunction: Function index " + std::to_string(number) + " out of bounds");
     }
 
-    Functions::const_iterator it = functionsNotAdded_.end();
-    for(int i = 0; i <= number; i++)
-    {
-        it--;
-    }
+    Functions::const_iterator it = functions_.begin();
+    std::advance(it, number);
     return this->conversion(it);
 }
 

@@ -5,7 +5,7 @@
 class MorphoSet
 {
 public:
-    MorpoSet();
+    MorphoSet();
 };
 
 #endif // MORPHOSET_H

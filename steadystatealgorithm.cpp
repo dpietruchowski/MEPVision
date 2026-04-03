@@ -1,4 +1,5 @@
 #include "steadystatealgorithm.h"
+#include <memory>
 #include <iostream>
 
 using namespace std;
@@ -122,8 +123,8 @@ void SteadyStateAlgorithm::runAlgorithm(int i, MEPFitness *fitness,
 ////            const_cast<MEPObject&>(population_.findByOrder(l)).show("window");
 ////        }
 //        cin.ignore();
-        MEPOperation *crossover = crossoverGenerator_.createRandomPtr();
-        MEPOperation *mutation = mutationGenerator_.createRandomPtr();
+        std::unique_ptr<MEPOperation> crossover(crossoverGenerator_.createRandomPtr());
+        std::unique_ptr<MEPOperation> mutation(mutationGenerator_.createRandomPtr());
 
         MEPChromosomes parents;
 //        cout << "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXD" << endl;
@@ -154,9 +155,6 @@ void SteadyStateAlgorithm::runAlgorithm(int i, MEPFitness *fitness,
 //        cin.ignore();
 
         population_.setObject(mutated);
-
-        delete crossover;
-        delete mutation;
     }
     static_cast<MEPObject&> (population_).sort();
     double avarage = double(population_.getSumScore())/population_.getSize();
