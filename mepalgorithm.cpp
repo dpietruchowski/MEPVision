@@ -1,4 +1,5 @@
 #include "mepalgorithm.h"
+#include <memory>
 #include <opencv2/highgui/highgui.hpp>
 #include <iostream>
 #include <iterator>
@@ -96,9 +97,8 @@ void MEPAlgorithm::run()
     Stats stats(chromosomeSize_, populationSize_, nIterations);
     population_.init(generator_);
 
-    MEPFitness *fitness = fitnessGenerator_.createRandomPtr();
+    std::unique_ptr<MEPFitness> fitness(fitnessGenerator_.createRandomPtr());
     population_.run(*fitness);
-    delete fitness;
     for(int i = 0; i < nIterations; ++i)
     {
         if(i == 150)
@@ -107,10 +107,9 @@ void MEPAlgorithm::run()
             swapFitnessGenerator(generator);
             registerFitness(1, HAUSDORFF_CANNY);
         }
-        fitness = fitnessGenerator_.createRandomPtr();
-        runAlgorithm(i, fitness, generator_, stats);
+        fitness.reset(fitnessGenerator_.createRandomPtr());
+        runAlgorithm(i, fitness.get(), generator_, stats);
         saveStats(stats);
-        delete fitness;
     }
 }
 

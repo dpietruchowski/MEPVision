@@ -3,7 +3,8 @@
 
 using namespace std;
 
-GenerationalAlgorithm::GenerationalAlgorithm()
+GenerationalAlgorithm::GenerationalAlgorithm():
+    sumProOperation_(0)
 {
 
 }

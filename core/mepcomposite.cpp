@@ -1,5 +1,6 @@
 #include "mepcomposite.h"
 
+#include <memory>
 #include <string>
 #include <iostream>
 #include <boost/range/adaptor/reversed.hpp>
@@ -28,17 +29,17 @@ void MEPComposite::swap(MEPComposite& rhs)
 
 const MEPObject &MEPComposite::select(MEPSelectionType type) const
 {
-    MEPSelection *selection;
+    std::unique_ptr<MEPSelection> selection;
     switch(type)
     {
     case FITNESS_ROULETTESELECTION:
-        selection = new FitnessRouletteSelection();
+        selection.reset(new FitnessRouletteSelection());
         break;
     case RANK_ROULETTESELECTION:
-        selection = new RankRouletteSelection();
+        selection.reset(new RankRouletteSelection());
         break;
     case TOURNAMENTSELECTION:
-        selection = new TournamentSelection(getSize()/2);
+        selection.reset(new TournamentSelection(getSize()/2));
         break;
     default:
         throw std::string("MEPComposite::select: Should never get here");
@@ -56,7 +57,6 @@ const MEPObject &MEPComposite::select(MEPSelectionType type) const
     int selectedRank = selection->getSelectedRank();
     const MEPObject& selected = findByRank(selectedRank);
 
-    delete selection;
     return selected;
 }
 
@@ -70,7 +70,7 @@ int MEPComposite::sortObject()
     if(!isValid())
         throw std::string("MEPComposite::sort: Object is invalid");
     
-    double sum;
+    double sum = 0.0;
     vector<MEPObject*> sorted;
     for(auto& obj : objects_)
     {
@@ -114,7 +114,7 @@ const MEPObject& MEPComposite::findByRank(const int rank) const
                       [&](const MEPObjectPtr& obj)
                         { return *obj == rank; });
     if(it == objects_.end())
-        --it;
+        throw std::string("MEPComposite::findByRank: Rank not found");
 
     return **it;
 }
@@ -126,7 +126,7 @@ const MEPObject& MEPComposite::findById(const MEPId& id) const
                       [&](const MEPObjectPtr& obj)
                          { return *obj == id; });
     if(it == objects_.end())
-        --it;
+        throw std::string("MEPComposite::findById: Id not found");
 
     return **it;
 }
@@ -369,7 +369,7 @@ std::vector<bool> MEPComposite::compare(const MEPComposite &rhs,
                                         int size) const
 {
     if((size > getSize()) || (size > rhs.getSize()))
-        throw "Za duza liczba genow do porownania";
+        throw std::string("Za duza liczba genow do porownania");
 
     vector<bool> comparison;
     for(int i = 0; i < size; i++)
