@@ -138,7 +138,7 @@ int MorphoParameters::typeFromString(std::string &type) const
     if(type == "Tophat") return cv::MORPH_TOPHAT;
     if(type == "Blackhat") return cv::MORPH_BLACKHAT;
 
-    throw std::string("MorphoParameters::typeFromString: Zly parametr");
+    throw std::string("MorphoParameters::typeFromString: Invalid morphological operation type");
 }
 
 //std::string MorphoParameters::shapeToString() const

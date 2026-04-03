@@ -114,7 +114,7 @@ const MEPObject& MEPComposite::findByRank(const int rank) const
                       [&](const MEPObjectPtr& obj)
                         { return *obj == rank; });
     if(it == objects_.end())
-        throw std::string("MEPComposite::findByRank: Rank not found");
+        throw std::string("MEPComposite::findByRank: Rank " + std::to_string(rank) + " not found");
 
     return **it;
 }
@@ -126,7 +126,8 @@ const MEPObject& MEPComposite::findById(const MEPId& id) const
                       [&](const MEPObjectPtr& obj)
                          { return *obj == id; });
     if(it == objects_.end())
-        throw std::string("MEPComposite::findById: Id not found");
+        throw std::string("MEPComposite::findById: Id not found: type=" + std::to_string(id.type)
+                          + " number=" + std::to_string(id.number));
 
     return **it;
 }
@@ -369,7 +370,7 @@ std::vector<bool> MEPComposite::compare(const MEPComposite &rhs,
                                         int size) const
 {
     if((size > getSize()) || (size > rhs.getSize()))
-        throw std::string("Za duza liczba genow do porownania");
+        throw std::string("MEPComposite::compare: Comparison size exceeds available genes");
 
     vector<bool> comparison;
     for(int i = 0; i < size; i++)

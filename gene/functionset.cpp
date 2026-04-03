@@ -266,7 +266,7 @@ std::pair<FunctionId,FunctionPtr>  FunctionSet::getFunction(int number) const
 {
     if(number >= this->getSize())
     {
-        throw std::string("FunctionSet::getFunction: Argument wiekszy niz liczba funkcji");
+        throw std::string("FunctionSet::getFunction: Function index " + std::to_string(number) + " out of bounds");
     }
 
     Functions::const_iterator it = functions_.begin();
