@@ -185,7 +185,7 @@ string MorphoElement::toString() const
 
 void MorphoElement::fromString(const string &selement, int nRows, int nCols)
 {
-    if(selement.size() != nRows * nCols)
+    if(selement.size() != static_cast<std::string::size_type>(nRows * nCols))
         throw std::string("MorphoElement::fromString: Wrong selement");
     element = cv::Mat(nRows, nCols, CV_8U);
     vector<int> vv(selement.begin(), selement.end());

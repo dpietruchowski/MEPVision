@@ -9,6 +9,8 @@ CONFIG += c++11
 
 QMAKE_CXXFLAGS += -std=c++11
 
+INCLUDEPATH += /usr/include/opencv4
+
 LIBS += -lopencv_highgui -lopencv_core -lopencv_imgcodecs -lopencv_imgproc
 LIBS += -L"/usr/lib/x86_64-linux-gnu" -lboost_system
 
@@ -51,7 +53,6 @@ SOURCES += main.cpp \
     parser/mepparser.cpp \
     mepalgorithm.cpp \
     #fitness/hausdorffextractor.cpp
-    fitness/cvhausdorff.cpp \
     steadystatealgorithm.cpp \
     generationalalgorithm.cpp
 
@@ -76,7 +77,6 @@ HEADERS += \
     gene/terminalgene.h \
     gene/terminalset.h \
     gene/gene.h \
-    functions.h \
     selection/mepselectiontypes.h\
     selection/mepselection.h \
     selection/rouletteselection.h \
@@ -100,7 +100,6 @@ HEADERS += \
     selection/selection.h \
     fitness/fitness.h \
     #fitness/hausdorffextractor.h
-    fitness/cvhausdorff.h \
     steadystatealgorithm.h \
     generationalalgorithm.h
 

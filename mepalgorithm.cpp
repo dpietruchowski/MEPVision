@@ -11,7 +11,7 @@ int MEPAlgorithm::PopulationSize;
 
 MEPAlgorithm::MEPAlgorithm():
     population_({MEPPOPULATION, 0, 0}, 100),
-    sumProGene_(0), sumProFitness_(0)
+    sumProFitness_(0), sumProGene_(0)
 {
     generator_.registerChromosome(MEPAlgorithm::createChromosome);
     generator_.registerPopulation(MEPAlgorithm::createPopulation);
@@ -163,7 +163,7 @@ void MEPAlgorithm::swapFitnessGenerator(MEPFitnessGenerator &generator)
     fitnessGenerator_.setReferenceImage(referenceImage_);
 }
 
-void MEPAlgorithm::parseOptions(const std::string &path)
+void MEPAlgorithm::parseOptions(const std::string& /*path*/)
 {
 
 }

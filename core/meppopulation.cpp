@@ -67,11 +67,12 @@ MEPObjectPtr MEPPopulation::reproduce(MEPSelectionType type,
         reproduced->run(*fitness);
         int offspringFitness = reproduced->getScore();
 
-        if(offspringFitness < parentBestFitness)
+        if(offspringFitness < parentBestFitness) {
             if(operation->getNParents() == 1)
                 stats.nBetterAfterMutation++;
             else
                 stats.nBetterAfterCrossover++;
+        }
 
         childComposite.addObject(reproduced);
 

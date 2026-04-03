@@ -1,6 +1,7 @@
 #ifndef GENERATOR_H
 #define GENERATOR_H
 #include <map>
+#include <cstdlib>
 
 template <typename T>
 struct CreationCounter

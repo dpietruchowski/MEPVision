@@ -90,7 +90,7 @@ struct MEPSHARED_EXPORT MEPId
 
 struct Stats
 {
-    Stats(int chromosomeSize, int populationSize, int nIterations):
+    Stats(int /*chromosomeSize*/, int populationSize, int nIterations):
         selectionRank(populationSize, 0),
         avarageFitness(nIterations, 0),
         fitness(nIterations, 0),
